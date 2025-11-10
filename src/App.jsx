@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
 import About from "./pages/About";
-import EditData from "./pages/EditData";
+import EditUser from "./pages/EditUser";
 import AddUser from "./pages/AddUser";
 
 function App() {
@@ -17,8 +17,9 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/about" element={<About />} />
           <Route path="/AddUser" element={<AddUser/>} />
-          <Route path="/EditData" element={<EditData />} />
-          <Route path="/EditData/:id" element={<EditData />} /> {/* ✅ Add this */}
+          {/* <Route path="/EditData" element={<EditData />} /> */}
+          <Route path="/AddUser" element={<AddUser />} />
+          <Route path="/EditUser/:id" element={<EditUser />} />
         </Routes>
       </div>
     </Router>
