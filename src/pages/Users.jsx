@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchUsers, deleteUserById } from "../api/usersApi";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
 import ExportPdf from "../components/ExportPdf";
 import ClipLoader from "react-spinners/BarLoader";
+import Pagination from "../components/Pagination"; // ✅ import here
 
 const Users = () => {
   const navigate = useNavigate();
-
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const pdfRef = useRef(); // Hidden container for rendering PDF content
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
 
   useEffect(() => {
     loadUsers();
@@ -47,7 +45,10 @@ const Users = () => {
     navigate(`/EditData/${item.id}`, { state: { ...item, method: "edit" } });
   };
 
-
+  // Pagination Logic
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div style={{ padding: "20px" }}>
@@ -73,28 +74,22 @@ const Users = () => {
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Actions</th>
+            <th colSpan="2">Actions</th>
           </tr>
         </thead>
 
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="3" style={{ textAlign: "center" }}>
+              <td colSpan="4" style={{ textAlign: "center" }}>
                 <center>
-                <ClipLoader
-                  color="#3498db"
-                  loading={loading}
-                  size={60}
-                  aria-label="Loading Spinner"
-                />
+                  <ClipLoader color="#3498db" loading={loading} size={60} />
                 </center>
-                
               </td>
             </tr>
           ) : (
-            Array.isArray(items) &&
-            items.map((item) => (
+            Array.isArray(currentItems) &&
+            currentItems.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
@@ -102,13 +97,23 @@ const Users = () => {
                   <button onClick={() => handleEditButton(item)}>Edit</button>
                   <button onClick={() => handleDeleteButton(item.id)}>Delete</button>
                 </td>
-                <td><ExportPdf user={item} />  {/* 👈 Pass user data here */}</td>
+                <td>
+                  <ExportPdf user={item} />
+                </td>
               </tr>
             ))
           )}
         </tbody>
       </table>
-      
+
+      {/* ✅ Use reusable Pagination component */}
+      {!loading && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 };
