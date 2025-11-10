@@ -1,116 +1,90 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchUsers, deleteUserById } from "../api/usersApi";
-import { useNavigate } from "react-router-dom";
-import ExportPdf from "../components/ExportPdf";
-import ClipLoader from "react-spinners/BarLoader";
-import Pagination from "../components/Pagination"; // ✅ import here
+import Pagination from "../components/Pagination";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Users = () => {
-  const navigate = useNavigate();
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const loadUsers = async () => {
+  const loadUsers = async (page = 1) => {
+    setLoading(true);
     try {
-      const data = await fetchUsers();
-      setItems(data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
+      const data = await fetchUsers(page, 2, search);
+      setUsers(data.data || []);
+      setTotalPages(data.last_page || 1);
+    } catch (err) {
+      console.error("Error fetching users:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    loadUsers(currentPage);
+  }, [currentPage, search]);
+
   const handleDeleteButton = async (id) => {
-    try {
+    if (window.confirm("Are you sure you want to delete this user?")) {
       await deleteUserById(id);
-      await loadUsers();
-      alert("Record Successfully Deleted!");
-    } catch (err) {
-      console.error("Delete error:", err);
+      loadUsers(currentPage);
     }
   };
 
-  const handleAdd = () => {
-    navigate("/AddUser/", { state: { method: "add" } });
-  };
-
-  const handleEditButton = (item) => {
-    navigate(`/EditData/${item.id}`, { state: { ...item, method: "edit" } });
-  };
-
-  // Pagination Logic
-  const totalPages = Math.ceil(items.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
-
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Users</h2>
+      <h2>Users (Server-side Pagination)</h2>
 
-      <button
-        onClick={handleAdd}
-        style={{
-          marginBottom: "15px",
-          background: "green",
-          color: "white",
-          padding: "6px 12px",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-        }}
-      >
-        + Add User
-      </button>
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ marginBottom: 20, padding: "6px", width: "250px" }}
+      />
 
-      <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table border="1" cellPadding="8" width="100%" style={{ borderCollapse: "collapse" }}>
         <thead style={{ background: "#f0f0f0" }}>
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th colSpan="2">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>
-                <center>
-                  <ClipLoader color="#3498db" loading={loading} size={60} />
-                </center>
+              <td colSpan="3" style={{ textAlign: "center" }}>
+                <ClipLoader color="#3498db" loading={loading} size={50} />
               </td>
             </tr>
-          ) : (
-            Array.isArray(currentItems) &&
-            currentItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
+          ) : users.length > 0 ? (
+            users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
                 <td>
-                  <button onClick={() => handleEditButton(item)}>Edit</button>
-                  <button onClick={() => handleDeleteButton(item.id)}>Delete</button>
-                </td>
-                <td>
-                  <ExportPdf user={item} />
+                  <button onClick={() => handleDeleteButton(user.id)}>Delete</button>
                 </td>
               </tr>
             ))
+          ) : (
+            <tr>
+              <td colSpan="3" style={{ textAlign: "center" }}>No users found</td>
+            </tr>
           )}
         </tbody>
       </table>
 
-      {/* ✅ Use reusable Pagination component */}
       {!loading && (
         <Pagination
-          currentPage={currentPage}
           totalPages={totalPages}
+          currentPage={currentPage}
           onPageChange={setCurrentPage}
         />
       )}

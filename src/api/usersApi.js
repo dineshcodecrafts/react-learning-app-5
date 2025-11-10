@@ -3,7 +3,7 @@ const Auth_key = `Bearer 1|UUZBXr3ECLm5RpZubHUCnDgCHivaiYvGCjiEzkRq77e022fe`;
 
 
 //Get All Data
-export const fetchUsers = async () => { 
+export const fetchUsers_old = async () => { 
     const response = await fetch(`${API_URL}/user`, {
         headers: {
             Authorization: `${Auth_key}`,
@@ -12,6 +12,24 @@ export const fetchUsers = async () => {
     });
     return await response.json();
 }
+
+// ✅ Fetch Users with pagination
+export const fetchUsers = async (page = 1, perPage = 5, search = "") => { 
+    const url = new URL(`${API_URL}/user`);
+    url.searchParams.append("page", page);
+    url.searchParams.append("per_page", perPage);
+    if (search) url.searchParams.append("search", search);
+  
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `${Auth_key}`,
+        Accept: "application/json",
+      },
+    });
+    
+    return await response.json(); // Laravel pagination structure
+  };
+  
 
 export const deleteUserById = async (id) => { 
     const response = await fetch(`${API_URL}/user/${id}`, {

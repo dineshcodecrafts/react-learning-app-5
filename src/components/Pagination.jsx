@@ -1,37 +1,37 @@
 import React from "react";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  if (totalPages === 0) return null;
+const Pagination = ({ totalPages, currentPage, onPageChange }) => {
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
 
   return (
     <div style={{ marginTop: "20px", textAlign: "center" }}>
-      {/* Prev Button */}
       <button
-        onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        onClick={() => onPageChange(currentPage - 1)}
       >
         Prev
       </button>
 
-      {/* Page Numbers */}
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      {pages.map((num) => (
         <button
-          key={page}
-          onClick={() => onPageChange(page)}
+          key={num}
+          onClick={() => onPageChange(num)}
           style={{
             margin: "0 5px",
-            backgroundColor: currentPage === page ? "#007bff" : "white",
-            color: currentPage === page ? "white" : "black",
+            backgroundColor: num === currentPage ? "#3498db" : "white",
+            color: num === currentPage ? "white" : "black",
           }}
         >
-          {page}
+          {num}
         </button>
       ))}
 
-      {/* Next Button */}
       <button
-        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        onClick={() => onPageChange(currentPage + 1)}
       >
         Next
       </button>
