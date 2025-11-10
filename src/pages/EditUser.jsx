@@ -20,6 +20,20 @@ const EditUser = () => {
 
   return (
     <div style={{ padding: 20 }}>
+       {/* Back button */}
+       <button
+        onClick={() => navigate(-1)}
+        style={{
+          marginBottom: "10px",
+          backgroundColor: "#ccc",
+          border: "none",
+          padding: "6px 12px",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        ← Back
+      </button>
       <h2>Edit User</h2>
       <form onSubmit={handleSubmit}>
         <input
