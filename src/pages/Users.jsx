@@ -3,8 +3,8 @@ import { fetchUsers, deleteUserById } from "../api/usersApi";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useNavigate } from "react-router-dom";
-
 import ExportPdf from "../components/ExportPdf";
+import ClipLoader from "react-spinners/BarLoader";
 
 const Users = () => {
   const navigate = useNavigate();
@@ -40,109 +40,14 @@ const Users = () => {
   };
 
   const handleAdd = () => {
-    navigate("/AddData/", { state: { method: "add" } });
+    navigate("/AddUser/", { state: { method: "add" } });
   };
 
   const handleEditButton = (item) => {
     navigate(`/EditData/${item.id}`, { state: { ...item, method: "edit" } });
   };
 
-  // ✅ Function to download PDF for specific user
-  const downloadPDF = async (user) => {
-    const input = pdfRef.current;
-  
-    // ✅ Make it off-screen for rendering
-    input.style.position = "absolute";
-    input.style.left = "-9999px";
-    input.style.display = "block";
-  
-    // ✅ Add your user content with image + text formatting
-    input.innerHTML = `
-      <div style="
-        width: 595px;  /* A4 width */
-        min-height: 842px;
-        padding: 40px;
-        background: #fff;
-        font-family: 'Arial', sans-serif;
-        color: #333;
-        box-sizing: border-box;
-        border: 1px solid #ddd;
-      ">
-        <h1 style="
-          text-align: center;
-          font-size: 22px;
-          margin-bottom: 30px;
-          color: #2c3e50;
-        ">User Profile</h1>
-  
-        <div style="
-          display: flex;
-          align-items: center;
-          margin-bottom: 30px;
-        ">
-          <div style="flex: 0 0 120px; text-align: center;">
-            <img 
-              src="${user.image || "https://via.placeholder.com/100"}" 
-              alt="Profile Image"
-              style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff;"
-            />
-          </div>
-          <div style="margin-left: 20px; flex: 1;">
-            <p style="font-size: 16px; margin: 5px 0;"><strong>Name:</strong> ${user.name}</p>
-            <p style="font-size: 16px; margin: 5px 0;"><strong>Email:</strong> ${user.email}</p>
-            <p style="font-size: 16px; margin: 5px 0;"><strong>Role:</strong> ${user.role || "User"}</p>
-          </div>
-        </div>
-  
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-          <tr style="background: #f8f9fa;">
-            <td style="padding: 10px; font-weight: bold;">Joined:</td>
-            <td style="padding: 10px;">${user.joined || "N/A"}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px; font-weight: bold;">Status:</td>
-            <td style="padding: 10px;">${user.status || "Active"}</td>
-          </tr>
-        </table>
-  
-        <div style="
-          margin-top: 40px;
-          text-align: center;
-          color: #888;
-          font-size: 12px;
-        ">
-          <em>Generated on ${new Date().toLocaleString()}</em>
-        </div>
-      </div>
-    `;
-  
-    // ✅ Wait for DOM rendering
-    await new Promise((r) => setTimeout(r, 300));
-  
-    // ✅ Convert to canvas
-    const canvas = await html2canvas(input, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-    });
-  
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-    const pdf = new jsPDF("p", "mm", "a4");
-  
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
-    // ✅ Add image to PDF
-    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-  
-    // ✅ Save with user name
-    pdf.save(`${user.name}_Profile.pdf`);
-  
-    // ✅ Hide it again
-    input.style.display = "none";
-  };
 
-  
 
   return (
     <div style={{ padding: "20px" }}>
@@ -175,7 +80,17 @@ const Users = () => {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="3" style={{ textAlign: "center" }}>Loading...</td>
+              <td colSpan="3" style={{ textAlign: "center" }}>
+                <center>
+                <ClipLoader
+                  color="#3498db"
+                  loading={loading}
+                  size={60}
+                  aria-label="Loading Spinner"
+                />
+                </center>
+                
+              </td>
             </tr>
           ) : (
             Array.isArray(items) &&
@@ -186,20 +101,6 @@ const Users = () => {
                 <td>
                   <button onClick={() => handleEditButton(item)}>Edit</button>
                   <button onClick={() => handleDeleteButton(item.id)}>Delete</button>
-                  <button
-                    onClick={() => downloadPDF(item)}
-                    style={{
-                      background: "#007bff",
-                      color: "white",
-                      padding: "6px 12px",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      marginLeft: "5px",
-                    }}
-                  >
-                    Export PDF
-                  </button>
                 </td>
                 <td><ExportPdf user={item} />  {/* 👈 Pass user data here */}</td>
               </tr>
@@ -207,9 +108,7 @@ const Users = () => {
           )}
         </tbody>
       </table>
-
-      {/* Hidden div used to generate PDF content */}
-      <div ref={pdfRef} style={{ display: "none" }}></div>
+      
     </div>
   );
 };

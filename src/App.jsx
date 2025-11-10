@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Users from "./pages/Users";
 import About from "./pages/About";
 import EditData from "./pages/EditData";
+import AddUser from "./pages/AddUser";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/users" element={<Users />} />
           <Route path="/about" element={<About />} />
+          <Route path="/AddUser" element={<AddUser/>} />
           <Route path="/EditData" element={<EditData />} />
           <Route path="/EditData/:id" element={<EditData />} /> {/* ✅ Add this */}
         </Routes>

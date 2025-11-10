@@ -22,3 +22,18 @@ export const deleteUserById = async (id) => {
     });
     return await response.json();
 }
+
+// Add User
+export const addUser = async (userData) => {
+    const response = await fetch(`${API_URL}/store`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `${Auth_key}`,
+            Accept: "application/json",
+        },
+        body: JSON.stringify(userData),
+    });
+
+    return await response.json();
+};
