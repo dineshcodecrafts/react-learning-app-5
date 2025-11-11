@@ -24,7 +24,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
             backgroundColor: num === currentPage ? "#3498db" : "white",
             color: num === currentPage ? "white" : "black",
           }}
-        >
+          >
           {num}
         </button>
       ))}

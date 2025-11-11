@@ -5,6 +5,9 @@ import Pagination from "../components/Pagination";
 import ExportPdf from "../components/ExportPdf";
 import ClipLoader from "react-spinners/ClipLoader";
 
+import { useSelector, useDispatch } from 'react-redux';
+import { updateCount } from '../Store/CountSlice';
+
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -12,6 +15,12 @@ const Users = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const UserCount = useSelector(state => state.users.usercount);
+
+  useEffect(() => {
+    dispatch(updateCount(users.length));
+  }, [users.length, dispatch]);
 
   const loadUsers = async (page = 1) => {
     setLoading(true);
@@ -68,6 +77,8 @@ const Users = () => {
 
       <table border="1" width="100%" cellPadding="8" style={{ borderCollapse: "collapse" }}>
         <thead style={{ background: "#f0f0f0" }}>
+          <p>Total count : {users.length}</p>
+          <p>Total counts : {UserCount}</p>
           <tr>
             <th>Name</th>
             <th>Email</th>

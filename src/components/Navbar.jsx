@@ -1,12 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+
 
 function Navbar() {
+
+  const UserCount = useSelector(state => state.users.usercount);
+
   return (
     <nav style={styles.nav}>
       {/* Left: Logo */}
       <div style={styles.logoContainer}>
-        <h2 style={styles.logo}>My App</h2>
+        <h2 style={styles.logo}>My App {UserCount}</h2>
       </div>
 
       {/* Right: Menu */}
