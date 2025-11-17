@@ -14,7 +14,7 @@ import {
 const styles = StyleSheet.create({
   page: {
     padding: 30,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#1a5882",
     fontFamily: "Helvetica",
   },
   header: {
@@ -110,7 +110,7 @@ const ExportPdf = ({ user }) => (
       ) : (
         <button
           style={{
-            background: "#007bff",
+            background: "#1a5882",
             color: "white",
             border: "none",
             borderRadius: "6px",

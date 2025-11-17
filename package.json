@@ -10,6 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/material": "^7.3.5",
+    "@mui/x-data-grid": "^8.18.0",
     "@react-pdf/renderer": "^4.3.1",
     "@reduxjs/toolkit": "^2.10.1",
     "html2canvas": "^1.4.1",
