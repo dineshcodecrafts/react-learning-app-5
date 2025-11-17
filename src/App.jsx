@@ -13,13 +13,13 @@ function App() {
       <Navbar />
       <div style={{ padding: "20px" }}>
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/AddUser" element={<AddUser/>} />
+          {/* <Route path="/" element={<Home/>} /> */}
+          {/* <Route path="/users" element={<Users />} /> */}
+          {/* <Route path="/about" element={<About />} />
+          <Route path="/AddUser" element={<AddUser/>} /> */}
           {/* <Route path="/EditData" element={<EditData />} /> */}
-          <Route path="/AddUser" element={<AddUser />} />
-          <Route path="/EditUser/:id" element={<EditUser />} />
+          {/* <Route path="/AddUser" element={<AddUser />} />
+          <Route path="/EditUser/:id" element={<EditUser />} /> */}
         </Routes>
       </div>
     </Router>
