@@ -24,14 +24,13 @@ import InfoIcon from '@mui/icons-material/Info';
 
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
+
 // Page components
 import HomePage from '../pages/Home';
 import UsersPage from '../pages/Users';
 import AboutPage from '../pages/About';
-
 import AddUser from '../pages/AddUser';
 import EditUser from '../pages/EditUser';
-
 
 const drawerWidth = 240;
 
@@ -182,7 +181,6 @@ export default function MiniDrawer() {
           <Route path="/" element={<HomePage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/about" element={<AboutPage />} />
-
           <Route path="/AddUser" element={<AddUser/>} />
           <Route path="/EditUser/:id" element={<EditUser/> } /> 
         </Routes>
