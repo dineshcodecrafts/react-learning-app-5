@@ -84,6 +84,7 @@ const Users = () => {
     }
   };
 
+
   return (
     <div style={{ padding: 20 }}>
       {/* Shared ConfirmDialog for both Edit & Delete */}
@@ -102,7 +103,10 @@ const Users = () => {
         confirmColor={dialogState.type === "delete" ? "error" : "primary"}
       />
 
+        
+
       <h2>Users List</h2>
+
 
       {/* Search input */}
       <input

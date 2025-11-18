@@ -29,7 +29,7 @@ export const loginUser = async (email, password) => {
   const data = await response.json();
 
   if (data.token) {
-    localStorage.setItem("Auth_key", data.token);
+    localStorage.setItem("token", data.token);
   }
 
   return data;
@@ -128,6 +128,6 @@ export const loginUser_old = async (email, password) => {
 
 // LOGOUT USER – remove token from localStorage
 export const logoutUser = () => {
-  localStorage.removeItem("auth_token");
+  localStorage.removeItem("token");
 };
 

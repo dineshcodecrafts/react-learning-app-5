@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -20,7 +21,17 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
+  useEffect(() => {
+    const authKey = localStorage.getItem("token"); // read inside effect
+    if (authKey) {
+      navigate("/dashboard", { replace: true }); // redirect to dashboard, replace history
+    }
+  }, [navigate]);
+
+
   const handleLogin = async () => {
+
     setError("");
     if (!email || !password) {
       setError("Please enter email and password");
@@ -31,7 +42,7 @@ const Login = () => {
     try {
       const data = await loginUser(email, password);
       if (data.token) {
-        localStorage.setItem("Auth_key", data.token); // store token
+        // store token
         navigate("/"); // redirect to dashboard/home
       } else {
         setError(data.message || "Login failed");
@@ -52,7 +63,7 @@ const Login = () => {
       <Grid item xs={11} sm={8} md={4}>
         <Paper elevation={6} sx={{ padding: 4 }}>
           <Typography variant="h4" align="center" gutterBottom>
-            Login
+            Login  {localStorage.getItem("token")}
           </Typography>
 
           {error && <Alert severity="error">{error}</Alert>}

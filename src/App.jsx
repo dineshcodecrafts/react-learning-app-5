@@ -7,7 +7,7 @@ import AboutPage from "./pages/About";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import ProtectedRoute from "./components/ProtectedRoute";
-import MiniDrawer from "./components/Navbar";
+import MiniDrawer from "./components/Navbar"; // your drawer
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         {/* Public Route */}
         <Route path="/login" element={<Login />} />
 
-        {/* Protected Routes wrapped with layout */}
+        {/* Protected Routes */}
         <Route
           path="/*"
           element={
@@ -27,8 +27,8 @@ function App() {
                   <Route path="/dashboard" element={<HomePage />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/about" element={<AboutPage />} />
-                  <Route path="/AddUser" element={<AddUser />} />
-                  <Route path="/EditUser/:id" element={<EditUser />} />
+                  <Route path="/add-user" element={<AddUser />} />
+                  <Route path="/edit-user/:id" element={<EditUser />} />
                 </Routes>
               </MiniDrawer>
             </ProtectedRoute>
