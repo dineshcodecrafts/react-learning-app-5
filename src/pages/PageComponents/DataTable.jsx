@@ -16,13 +16,11 @@ export default function DataTable({
   pageSize,
   setPageSize,
   totalRows,
-  columns_data,
 }) {
 
   const navigate = useNavigate();
-  const columns = columns_data;
 
-  const sample_columns = [
+  const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 250 },
     { field: "email", headerName: "Email", width: 350 },

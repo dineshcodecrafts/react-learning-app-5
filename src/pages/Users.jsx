@@ -1,19 +1,14 @@
+// src/pages/Users.jsx
 import React, { useEffect, useState } from "react";
 import { fetchUsers, deleteUserById } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
-import ExportPdf from "../components/ExportPdf";
+import { useDispatch } from "react-redux";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { updateCount } from '../Store/CountSlice';
+import { updateCount } from "../Store/CountSlice";
+import ConfirmDialog from "../components/ConfirmDialog";
 import DataTable from "./PageComponents/DataTable";
 
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-
-import DialogContentText from '@mui/material/DialogContentText';
+import Button from "@mui/material/Button";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -24,27 +19,23 @@ const Users = () => {
   const [totalRows, setTotalRows] = useState(0);
 
   const [search, setSearch] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  // Load user count to Redux
   useEffect(() => {
     dispatch(updateCount(users.length));
   }, [users.length, dispatch]);
 
+  // Load users from API
   const loadUsers = async (page = 1, limit = pageSize) => {
     setLoading(true);
+
     try {
       const data = await fetchUsers(page, limit, search);
-
       setUsers(data.data || []);
       setTotalRows(data.total || 0);
     } catch (err) {
@@ -54,61 +45,47 @@ const Users = () => {
     }
   };
 
+  // Reload on page change / search change
   useEffect(() => {
     loadUsers(currentPage, pageSize);
   }, [currentPage, pageSize, search]);
 
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-
+  // Open delete dialog
   const openDeleteDialog = (id) => {
     setSelectedUserId(id);
     setDeleteDialogOpen(true);
   };
-  
+
+  // Close delete dialog
   const closeDeleteDialog = () => {
     setSelectedUserId(null);
     setDeleteDialogOpen(false);
   };
 
+  // Confirm delete → API call
   const handleConfirmDelete = async () => {
-    if (selectedUserId) {
-      await deleteUserById(selectedUserId);
-      loadUsers(currentPage, pageSize);
-      closeDeleteDialog();
-    }
+    await deleteUserById(selectedUserId);
+    loadUsers(currentPage, pageSize);
+    closeDeleteDialog();
   };
-  
 
   return (
     <div style={{ padding: 20 }}>
-
-    <Dialog
-      open={deleteDialogOpen}
-      onClose={closeDeleteDialog}
-      aria-labelledby="delete-dialog-title"
-      aria-describedby="delete-dialog-description"
-    >
-      <DialogTitle id="delete-dialog-title">Delete User</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="delete-dialog-description">
-          Are you sure you want to delete this user? This action cannot be undone.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeDeleteDialog}>Cancel</Button>
-        <Button onClick={handleConfirmDelete} color="error" autoFocus>
-          Delete
-        </Button>
-      </DialogActions>
-    </Dialog>
-
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        title="Delete User"
+        message="Are you sure you want to delete this user? This action cannot be undone."
+        onClose={closeDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmColor="error"
+      />
 
       <h2>Users List</h2>
 
-      
-
-      {/* Search Box */}
+      {/* Search */}
       <input
         type="text"
         placeholder="Search users..."
@@ -126,6 +103,7 @@ const Users = () => {
         }}
       />
 
+      {/* Add User Button */}
       <Button
         variant="contained"
         color="primary"
@@ -135,9 +113,10 @@ const Users = () => {
         + Add User
       </Button>
 
+      {/* Data Table */}
       <DataTable
         users={users}
-        handleDelete={(id) => openDeleteDialog(id)}
+        handleDelete={openDeleteDialog}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
