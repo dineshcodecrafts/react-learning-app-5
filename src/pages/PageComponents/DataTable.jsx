@@ -15,6 +15,9 @@ export default function DataTable({
   setPageSize,
   totalRows,
 }) {
+
+
+
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 250 },
@@ -50,6 +53,9 @@ export default function DataTable({
       ),
     },
   ];
+
+
+
 
   return (
     <Paper sx={{ height: "100%", width: "100%", mt: 2 }}>

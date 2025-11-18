@@ -1,5 +1,42 @@
+
 const API_URL  = `http://127.0.0.1:8000/api`;
-const Auth_key = `Bearer 1|UUZBXr3ECLm5RpZubHUCnDgCHivaiYvGCjiEzkRq77e022fe`;
+// ⬇️ GLOBAL Dynamic token (automatically updates when login)
+let Auth_key = localStorage.getItem("token")
+  ? `Bearer ${localStorage.getItem("token")}`
+  : null;
+
+
+
+// 🔄 If token changes later (after login), update global variable
+export const refreshToken = () => {
+  Auth_key = localStorage.getItem("token")
+    ? `Bearer ${localStorage.getItem("token")}`
+    : null;
+};
+
+/* ------------------ LOGIN ------------------ */
+
+export const loginUser = async (email, password) => {
+  const response = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await response.json();
+
+  if (data.token) {
+    localStorage.setItem("Auth_key", data.token);
+  }
+
+  return data;
+};
+
+
+
 
 // Server-side pagination
 export const fetchUsers = async (page = 1, perPage = 5, search = "") => { 
@@ -27,6 +64,8 @@ export const getUserById = async (id) => {
   });
   return await response.json();
 };
+
+
 
 // Add user
 export const addUser = async (userData) => {
@@ -67,3 +106,28 @@ export const deleteUserById = async (id) => {
   });
   return await response.json();
 };
+
+// Login API
+export const loginUser_old = async (email, password) => {
+  const response = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password
+    }),
+  });
+
+  return await response.json();
+};
+
+
+
+// LOGOUT USER – remove token from localStorage
+export const logoutUser = () => {
+  localStorage.removeItem("auth_token");
+};
+

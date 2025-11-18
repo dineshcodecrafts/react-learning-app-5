@@ -47,7 +47,7 @@ const AddUser = () => {
           cursor: "pointer",
         }}
         >
-        ← Back
+        ← Back  {localStorage.getItem("Auth_key") };
       </button>
       <center>
       <h2>Add User</h2>
