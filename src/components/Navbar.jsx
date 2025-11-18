@@ -22,12 +22,15 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import InfoIcon from '@mui/icons-material/Info';
 
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 // Page components
 import HomePage from '../pages/Home';
 import UsersPage from '../pages/Users';
 import AboutPage from '../pages/About';
 
 import AddUser from '../pages/AddUser';
+import EditUser from '../pages/EditUser';
 
 
 const drawerWidth = 240;
@@ -128,9 +131,18 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            My App {UserCount}
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            My App 
+
+          
           </Typography>
+
+           {/* Badge icon */}
+           <IconButton color="inherit">
+            <Badge color="secondary" badgeContent={UserCount} showZero>
+              <MailIcon />
+            </Badge>
+    </IconButton>
         </Toolbar>
       </AppBar>
 
@@ -172,6 +184,7 @@ export default function MiniDrawer() {
           <Route path="/about" element={<AboutPage />} />
 
           <Route path="/AddUser" element={<AddUser/>} />
+          <Route path="/EditUser/:id" element={<EditUser/> } /> 
         </Routes>
       </Box>
     </Box>

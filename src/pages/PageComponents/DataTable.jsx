@@ -49,7 +49,7 @@ export default function DataTable({
           </Button> */}
           <EditIcon
             sx={{
-              fontSize: 28,
+              fontSize: 40,
               padding: "10px",
               cursor: "pointer",
               color: "#1a5882",
@@ -75,7 +75,7 @@ export default function DataTable({
           */}
           <DeleteIcon
             sx={{
-              fontSize: 28,
+              fontSize: 40,
               padding: "10px",
               cursor: "pointer",
               color: "black",

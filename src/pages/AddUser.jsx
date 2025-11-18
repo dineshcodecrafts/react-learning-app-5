@@ -35,9 +35,8 @@ const AddUser = () => {
   return (
 
     <>
-    
     {/* Back button */}
-    <button
+      <button
         onClick={() => navigate(-1)}
         style={{
           marginBottom: "10px",
@@ -47,9 +46,9 @@ const AddUser = () => {
           borderRadius: "4px",
           cursor: "pointer",
         }}
-      >
+        >
         ← Back
-        </button>
+      </button>
       <center>
       <h2>Add User</h2>
       <Box sx={{ p: 3 }}>
@@ -65,7 +64,6 @@ const AddUser = () => {
               error={!!errors.name}
               helperText={errors.name}
             />
-
             <TextField
               label="Email"
               variant="outlined"
@@ -76,7 +74,6 @@ const AddUser = () => {
               error={!!errors.email}
               helperText={errors.email}
             />
-
             <TextField
               label="Password"
               type="password"
@@ -88,21 +85,19 @@ const AddUser = () => {
               error={!!errors.password}
               helperText={errors.password}
             />
-
             <Button
               variant="contained"
               type="submit"
               sx={{
                 backgroundColor: "#1a5882",   // custom green
               }}
-            >
+              >
               Save
             </Button>
           </Stack>
         </form>
       </Box>
       </center>
-
     </>
   );
 };

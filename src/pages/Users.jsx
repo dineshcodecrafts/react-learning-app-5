@@ -7,6 +7,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateCount } from '../Store/CountSlice';
 import DataTable from "./PageComponents/DataTable";
 
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+
+import DialogContentText from '@mui/material/DialogContentText';
+
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,6 +26,15 @@ const Users = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     dispatch(updateCount(users.length));
@@ -41,16 +58,55 @@ const Users = () => {
     loadUsers(currentPage, pageSize);
   }, [currentPage, pageSize, search]);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      await deleteUserById(id);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const openDeleteDialog = (id) => {
+    setSelectedUserId(id);
+    setDeleteDialogOpen(true);
+  };
+  
+  const closeDeleteDialog = () => {
+    setSelectedUserId(null);
+    setDeleteDialogOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedUserId) {
+      await deleteUserById(selectedUserId);
       loadUsers(currentPage, pageSize);
+      closeDeleteDialog();
     }
   };
+  
 
   return (
     <div style={{ padding: 20 }}>
+
+    <Dialog
+      open={deleteDialogOpen}
+      onClose={closeDeleteDialog}
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
+    >
+      <DialogTitle id="delete-dialog-title">Delete User</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="delete-dialog-description">
+          Are you sure you want to delete this user? This action cannot be undone.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeDeleteDialog}>Cancel</Button>
+        <Button onClick={handleConfirmDelete} color="error" autoFocus>
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+
       <h2>Users List</h2>
+
+      
 
       {/* Search Box */}
       <input
@@ -70,25 +126,18 @@ const Users = () => {
         }}
       />
 
-      <button
+      <Button
+        variant="contained"
+        color="primary"
         onClick={() => navigate("/AddUser")}
-        style={{
-          background: "#1a5882",
-          color: "#fff",
-          padding: "6px 12px",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-          marginLeft: 15,
-         
-        }}
+        sx={{ marginLeft: 2 }}
       >
         + Add User
-      </button>
+      </Button>
 
       <DataTable
         users={users}
-        handleDelete={handleDelete}
+        handleDelete={(id) => openDeleteDialog(id)}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
