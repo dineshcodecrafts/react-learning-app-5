@@ -1,25 +1,20 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import ExportPdf from "../../components/ExportPdf";
-import { useNavigate } from "react-router-dom";
-
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function DataTable({
   users,
-  handleDelete,
+  handleDelete, // opens shared dialog in parent with type 'delete'
+  handleEdit,   // opens shared dialog in parent with type 'edit'
   currentPage,
   setCurrentPage,
   pageSize,
   setPageSize,
   totalRows,
 }) {
-
-  const navigate = useNavigate();
-
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 250 },
@@ -37,8 +32,9 @@ export default function DataTable({
               cursor: "pointer",
               color: "#1a5882",
             }}
-            onClick={() => navigate(`/EditUser/${params.row.id}`)}
+            onClick={() => handleEdit(params.row.id)}
           />
+
           <DeleteIcon
             sx={{
               fontSize: 40,
@@ -47,7 +43,8 @@ export default function DataTable({
               color: "black",
             }}
             onClick={() => handleDelete(params.row.id)}
-          />  
+          />
+
           <ExportPdf user={params.row} />
         </div>
       ),
@@ -55,7 +52,7 @@ export default function DataTable({
   ];
 
   return (
-    <Paper sx={{ height: "100%", width: "100%" }}>
+    <Paper sx={{ height: "100%", width: "100%", mt: 2 }}>
       <DataGrid
         rows={users}
         columns={columns}

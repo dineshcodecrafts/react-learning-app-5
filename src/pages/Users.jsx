@@ -1,39 +1,40 @@
-// src/pages/Users.jsx
 import React, { useEffect, useState } from "react";
 import { fetchUsers, deleteUserById } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
 import { updateCount } from "../Store/CountSlice";
+
 import ConfirmDialog from "../components/ConfirmDialog";
 import DataTable from "./PageComponents/DataTable";
-
 import Button from "@mui/material/Button";
 
 const Users = () => {
+  // State: users & loading
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
 
+  // Search
   const [search, setSearch] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  // Single dialog state for both actions: { open, type: 'delete'|'edit'|null, id }
+  const [dialogState, setDialogState] = useState({ open: false, type: null, id: null });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Load user count to Redux
+  // Update redux count
   useEffect(() => {
     dispatch(updateCount(users.length));
   }, [users.length, dispatch]);
 
-  // Load users from API
+  // Load users
   const loadUsers = async (page = 1, limit = pageSize) => {
     setLoading(true);
-
     try {
       const data = await fetchUsers(page, limit, search);
       setUsers(data.data || []);
@@ -45,47 +46,65 @@ const Users = () => {
     }
   };
 
-  // Reload on page change / search change
+  // Reload when page/search changes
   useEffect(() => {
     loadUsers(currentPage, pageSize);
   }, [currentPage, pageSize, search]);
 
-  // Open delete dialog
-  const openDeleteDialog = (id) => {
-    setSelectedUserId(id);
-    setDeleteDialogOpen(true);
+  // Open shared confirm dialog for either edit or delete
+  const openDialog = (type, id) => {
+    setDialogState({ open: true, type, id });
   };
 
-  // Close delete dialog
-  const closeDeleteDialog = () => {
-    setSelectedUserId(null);
-    setDeleteDialogOpen(false);
+  // Close dialog
+  const closeDialog = () => {
+    setDialogState({ open: false, type: null, id: null });
   };
 
-  // Confirm delete → API call
-  const handleConfirmDelete = async () => {
-    await deleteUserById(selectedUserId);
-    loadUsers(currentPage, pageSize);
-    closeDeleteDialog();
+  // Confirm handler that branches based on dialog type
+  const handleConfirm = async () => {
+    const { type, id } = dialogState;
+
+    if (!type || !id) {
+      closeDialog();
+      return;
+    }
+
+    if (type === "delete") {
+      // Delete flow
+      await deleteUserById(id);
+      await loadUsers(currentPage, pageSize);
+      closeDialog();
+    } else if (type === "edit") {
+      // Edit flow -> navigate to edit page
+      navigate(`/EditUser/${id}`);
+      closeDialog();
+    } else {
+      closeDialog();
+    }
   };
 
   return (
     <div style={{ padding: 20 }}>
-      {/* Delete confirmation dialog */}
+      {/* Shared ConfirmDialog for both Edit & Delete */}
       <ConfirmDialog
-        open={deleteDialogOpen}
-        title="Delete User"
-        message="Are you sure you want to delete this user? This action cannot be undone."
-        onClose={closeDeleteDialog}
-        onConfirm={handleConfirmDelete}
-        confirmText="Delete"
+        open={dialogState.open}
+        title={dialogState.type === "delete" ? "Delete User" : "Edit User"}
+        message={
+          dialogState.type === "delete"
+            ? "Are you sure you want to delete this user? This action cannot be undone."
+            : "Do you want to edit this user's details?"
+        }
+        onClose={closeDialog}
+        onConfirm={handleConfirm}
+        confirmText={dialogState.type === "delete" ? "Delete" : "Edit"}
         cancelText="Cancel"
-        confirmColor="error"
+        confirmColor={dialogState.type === "delete" ? "error" : "primary"}
       />
 
       <h2>Users List</h2>
 
-      {/* Search */}
+      {/* Search input */}
       <input
         type="text"
         placeholder="Search users..."
@@ -103,7 +122,7 @@ const Users = () => {
         }}
       />
 
-      {/* Add User Button */}
+      {/* Add user button */}
       <Button
         variant="contained"
         color="primary"
@@ -113,10 +132,11 @@ const Users = () => {
         + Add User
       </Button>
 
-      {/* Data Table */}
+      {/* DataTable: pass handlers that open shared dialog */}
       <DataTable
         users={users}
-        handleDelete={openDeleteDialog}
+        handleDelete={(id) => openDialog("delete", id)}
+        handleEdit={(id) => openDialog("edit", id)}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
