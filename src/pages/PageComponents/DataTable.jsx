@@ -16,9 +16,13 @@ export default function DataTable({
   pageSize,
   setPageSize,
   totalRows,
+  columns_data,
 }) {
+
   const navigate = useNavigate();
-  const columns = [
+  const columns = columns_data;
+
+  const sample_columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 250 },
     { field: "email", headerName: "Email", width: 350 },
@@ -28,25 +32,6 @@ export default function DataTable({
       width: 300,
       renderCell: (params) => (
         <div style={{ display: "flex", gap: 8 }}>
-          {/* 
-          <Button
-            variant="contained"
-            size="medium"
-            onClick={() => navigate(`/EditUser/${params.row.id}`)}
-            sx={{
-              minWidth: "32px",
-              fontSize: 20,
-              padding: "5px",
-              borderRadius: "10px",
-              border: "none",
-              boxShadow: "none",
-              "&:hover": {
-                boxShadow: "none",
-              },
-            }}
-          >
-            <EditIcon fontSize="small" />  
-          </Button> */}
           <EditIcon
             sx={{
               fontSize: 40,
@@ -56,23 +41,6 @@ export default function DataTable({
             }}
             onClick={() => navigate(`/EditUser/${params.row.id}`)}
           />
-          {/* 
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={() => handleDelete(params.row.id)}
-            sx={{
-              fontSize: 40,
-              minWidth: "32px",
-              padding: "2px",
-              borderRadius: "6px",
-              borderWidth: "1px",
-            }}
-          >
-          <DeleteIcon sx={{ fontSize: 30 }} />
-          </Button>
-          */}
           <DeleteIcon
             sx={{
               fontSize: 40,
@@ -82,8 +50,6 @@ export default function DataTable({
             }}
             onClick={() => handleDelete(params.row.id)}
           />  
-
-
           <ExportPdf user={params.row} />
         </div>
       ),
