@@ -27,8 +27,8 @@ function App() {
                   <Route path="/dashboard" element={<HomePage />} />
                   <Route path="/users" element={<UsersPage />} />
                   <Route path="/about" element={<AboutPage />} />
-                  <Route path="/add-user" element={<AddUser />} />
-                  <Route path="/edit-user/:id" element={<EditUser />} />
+                  <Route path="/AddUser" element={<AddUser />} />
+                  <Route path="/EditUser/:id" element={<EditUser />} />
                 </Routes>
               </MiniDrawer>
             </ProtectedRoute>

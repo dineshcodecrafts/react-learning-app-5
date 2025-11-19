@@ -7,17 +7,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function DataTable({
   users,
-  handleDelete, // opens shared dialog in parent with type 'delete'
-  handleEdit,   // opens shared dialog in parent with type 'edit'
+  handleDelete,
+  handleEdit,
   currentPage,
   setCurrentPage,
   pageSize,
   setPageSize,
   totalRows,
+  loading = false, // pass loading from parent
 }) {
-
-
-
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
     { field: "name", headerName: "Name", width: 250 },
@@ -54,11 +52,8 @@ export default function DataTable({
     },
   ];
 
-
-
-
   return (
-    <Paper sx={{ height: "100%", width: "100%", mt: 2 }}>
+    <Paper sx={{ height: "100%", width: "100%", mt: 2 }}> {/* fixed height */}
       <DataGrid
         rows={users}
         columns={columns}
@@ -74,6 +69,7 @@ export default function DataTable({
           setCurrentPage(model.page + 1);
           setPageSize(model.pageSize);
         }}
+        loading={loading} // this triggers built-in spinner overlay
         sx={{ border: 0 }}
       />
     </Paper>

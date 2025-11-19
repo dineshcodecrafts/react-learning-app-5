@@ -40,6 +40,7 @@ export const loginUser = async (email, password) => {
 
 // Server-side pagination
 export const fetchUsers = async (page = 1, perPage = 5, search = "") => { 
+  
   const url = new URL(`${API_URL}/user`);
   url.searchParams.append("page", page);
   url.searchParams.append("per_page", perPage);

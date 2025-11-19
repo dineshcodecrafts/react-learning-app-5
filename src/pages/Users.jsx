@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 const Users = () => {
   // State: users & loading
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // <-- already exists
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +34,7 @@ const Users = () => {
 
   // Load users
   const loadUsers = async (page = 1, limit = pageSize) => {
-    setLoading(true);
+    setLoading(true); // <-- start spinner
     try {
       const data = await fetchUsers(page, limit, search);
       setUsers(data.data || []);
@@ -42,7 +42,7 @@ const Users = () => {
     } catch (err) {
       console.error("Error fetching users:", err);
     } finally {
-      setLoading(false);
+      setLoading(false); // <-- stop spinner
     }
   };
 
@@ -71,12 +71,10 @@ const Users = () => {
     }
 
     if (type === "delete") {
-      // Delete flow
       await deleteUserById(id);
       await loadUsers(currentPage, pageSize);
       closeDialog();
     } else if (type === "edit") {
-      // Edit flow -> navigate to edit page
       navigate(`/EditUser/${id}`);
       closeDialog();
     } else {
@@ -84,10 +82,8 @@ const Users = () => {
     }
   };
 
-
   return (
     <div style={{ padding: 20 }}>
-      {/* Shared ConfirmDialog for both Edit & Delete */}
       <ConfirmDialog
         open={dialogState.open}
         title={dialogState.type === "delete" ? "Delete User" : "Edit User"}
@@ -103,10 +99,7 @@ const Users = () => {
         confirmColor={dialogState.type === "delete" ? "error" : "primary"}
       />
 
-        
-
       <h2>Users List</h2>
-
 
       {/* Search input */}
       <input
@@ -136,9 +129,10 @@ const Users = () => {
         + Add User
       </Button>
 
-      {/* DataTable: pass handlers that open shared dialog */}
+      {/* DataTable: pass loading state */}
       <DataTable
         users={users}
+        loading={loading}  // <-- pass loading here
         handleDelete={(id) => openDialog("delete", id)}
         handleEdit={(id) => openDialog("edit", id)}
         currentPage={currentPage}
