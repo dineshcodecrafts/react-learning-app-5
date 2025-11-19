@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { styled, useTheme } from "@mui/material/styles";
@@ -38,6 +38,8 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 
 import Chip from '@mui/material/Chip';
+
+import LogoutHandler from "./LogoutHandler";
 
 const drawerWidth = 240;
 
@@ -103,6 +105,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 export default function MiniDrawer({ children }) {
 
 
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const OpenBadge = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -206,7 +213,15 @@ export default function MiniDrawer({ children }) {
               <MenuItem onClick={handleLogout}> <LogoutIcon sx={{ mr: 1 }} />Logout</MenuItem>
 
               
-              
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  setLogoutOpen(true);
+                }}
+              >
+                <LogoutIcon sx={{ mr: 1 }} />
+                Logout
+            </MenuItem>
               
              
             </Menu>
@@ -214,6 +229,9 @@ export default function MiniDrawer({ children }) {
 
         </Toolbar>
       </AppBar>
+
+        {/* Logout System */}
+        <LogoutHandler open={logoutOpen} setOpen={setLogoutOpen} />
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
