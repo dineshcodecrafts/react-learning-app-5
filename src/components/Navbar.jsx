@@ -27,6 +27,16 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { logoutUser } from "../api/usersApi";
 
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+
+
+import Chip from '@mui/material/Chip';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -89,9 +99,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 );
 
 export default function MiniDrawer({ children }) {
+
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const OpenBadge = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  
   const UserCount = useSelector((state) => state.users.usercount) || 0;
 
   const handleLogout = () => {
@@ -128,15 +150,65 @@ export default function MiniDrawer({ children }) {
             My App
           </Typography>
 
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge color="secondary" badgeContent={UserCount} showZero>
               <MailIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
 
-          <IconButton color="inherit" onClick={handleLogout}>
+          {/* <IconButton color="inherit" onClick={handleLogout}>
             <LogoutIcon />
-          </IconButton>
+          </IconButton> */}
+
+          <Stack direction="row" spacing={1}>
+            <Chip label="Welcome Test !.."  sx={{ color: "#fff",borderColor: "#fff" }} onClick={handleClick} />
+          </Stack>
+
+          <div>
+
+          
+           
+            <Button
+              id="demo-positioned-button"
+              aria-controls={OpenBadge ? 'demo-positioned-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={OpenBadge ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              <Stack direction="row" spacing={4}>
+                <Avatar alt="Remy Sharp" src="../../images/avatar.png" />
+              </Stack>
+              {/* Dashboard */}
+            </Button>
+           
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={OpenBadge}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              
+              <IconButton color="inherit" onClick={handleLogout}>
+                <LogoutIcon /> <MenuItem onClick={handleClose}>Logout </MenuItem>
+              </IconButton>
+              
+              
+              
+             
+            </Menu>
+    </div>
+
         </Toolbar>
       </AppBar>
 
