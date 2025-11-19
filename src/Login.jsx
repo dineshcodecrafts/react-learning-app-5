@@ -11,6 +11,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+
+import { useDispatch } from "react-redux";
+import { updateProfile } from "./Store/CountSlice";
+
 import { loginUser } from "./api/usersApi"; // make sure path is correct
 
 const Login = () => {
@@ -19,6 +23,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const authKey = localStorage.getItem("token"); // read inside effect
@@ -37,10 +43,34 @@ const Login = () => {
     setLoading(true);
     try {
       const data = await loginUser(email, password);
+    
       if (data.token) {
+        console.log(data);
+        // Example response:
+        // {
+        //   token: "5|L08EJjZfYHLPBubgpwKo6cmM0bvradGD4RxfMyzE2cacddc1",
+        //   name: "John Doe",
+        //   id: 2,
+        //   email: "john@example.com"
+        // }
+    
+        // Save JWT token
         localStorage.setItem("token", data.token);
-        navigate("/dashboard"); // redirect to dashboard
-      } else {
+    
+        // Save profile data in Redux
+        dispatch(
+          updateProfile({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            avatar: data.avatar ?? "https://example.com/img.png",
+          })
+        );
+    
+        // Redirect
+        navigate("/dashboard");
+      }
+     else {
         setError(data.message || "Login failed");
       }
     } catch (err) {

@@ -34,6 +34,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
 
 import Chip from '@mui/material/Chip';
 
@@ -113,8 +115,8 @@ export default function MiniDrawer({ children }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  
-  const UserCount = useSelector((state) => state.users.usercount) || 0;
+
+  const profile = useSelector((state) => state.users.profile);
 
   const handleLogout = () => {
     logoutUser();
@@ -161,13 +163,14 @@ export default function MiniDrawer({ children }) {
           </IconButton> */}
 
           <Stack direction="row" spacing={1}>
-            <Chip label="Welcome Test !.."  sx={{ color: "#fff",borderColor: "#fff" }} onClick={handleClick} />
+            <Chip 
+              label={`Welcome ${profile?.name ?? "Guest"} !..`} 
+              sx={{ color: "#fff", borderColor: "#fff" }} 
+              // onClick={handleClick} 
+            />
           </Stack>
 
           <div>
-
-          
-           
             <Button
               id="demo-positioned-button"
               aria-controls={OpenBadge ? 'demo-positioned-menu' : undefined}
@@ -196,12 +199,12 @@ export default function MiniDrawer({ children }) {
                 horizontal: 'left',
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
+
               
-              <IconButton color="inherit" onClick={handleLogout}>
-                <LogoutIcon /> <MenuItem onClick={handleClose}>Logout </MenuItem>
-              </IconButton>
+              <MenuItem onClick={handleClose}> <LogoutIcon sx={{ mr: 1 }} />My account</MenuItem>
+              <MenuItem onClick={handleLogout}> <LogoutIcon sx={{ mr: 1 }} />Logout</MenuItem>
+
               
               
               

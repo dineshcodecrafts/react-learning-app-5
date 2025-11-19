@@ -1,11 +1,19 @@
 import React from 'react';
 import { Box, Typography, Card, CardContent, Grid, Button } from '@mui/material';
 
+import { useSelector } from "react-redux";
+
 const Home = () => {
+
+  // const UserName = useSelector((state) => state.users.name) ;
+  const profile = useSelector((state) => state.users.profile);
+  // console.log("Profile:", profile);
+
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Welcome to My App!
+          Welcome to My App! {profile.name}
       </Typography>
       <Typography variant="body1" sx={{ mb: 3 }}>
         This is your home page. Use the navigation drawer to access different sections of the application.
