@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,17 +20,14 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   useEffect(() => {
     const authKey = localStorage.getItem("token"); // read inside effect
     if (authKey) {
-      navigate("/dashboard", { replace: true }); // redirect to dashboard, replace history
+      navigate("/dashboard", { replace: true }); // redirect to dashboard
     }
   }, [navigate]);
 
-
   const handleLogin = async () => {
-
     setError("");
     if (!email || !password) {
       setError("Please enter email and password");
@@ -42,8 +38,8 @@ const Login = () => {
     try {
       const data = await loginUser(email, password);
       if (data.token) {
-        // store token
-        navigate("/"); // redirect to dashboard/home
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard"); // redirect to dashboard
       } else {
         setError(data.message || "Login failed");
       }
@@ -58,12 +54,28 @@ const Login = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ minHeight: "100vh", background: "#f5f5f5" }}
+      style={{
+        minHeight: "100vh",
+        background: "white",
+      }}
     >
       <Grid item xs={11} sm={8} md={4}>
-        <Paper elevation={6} sx={{ padding: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Login  {localStorage.getItem("token")}
+        <Paper
+          elevation={10}
+          sx={{
+            padding: 5,
+            borderRadius: 3,
+            backgroundColor: "#ffffffcc",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+          }}
+        >
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "#1a5882" }}
+          >
+            Login
           </Typography>
 
           {error && <Alert severity="error">{error}</Alert>}
@@ -80,6 +92,13 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1a5882",
+                  },
+                },
+              }}
             />
             <TextField
               label="Password"
@@ -88,15 +107,29 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#1a5882",
+                  },
+                },
+              }}
             />
             <Button
               variant="contained"
-              color="primary"
               size="large"
               onClick={handleLogin}
               disabled={loading}
+              sx={{
+                backgroundColor: "#1a5882",
+                "&:hover": {
+                  backgroundColor: "#15446a",
+                },
+                fontWeight: "bold",
+                mt: 1,
+              }}
             >
-              {loading ? <CircularProgress size={24} /> : "Login"}
+              {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
             </Button>
           </Box>
         </Paper>
