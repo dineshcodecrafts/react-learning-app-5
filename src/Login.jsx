@@ -17,6 +17,8 @@ import { updateProfile } from "./Store/CountSlice";
 
 import { loginUser } from "./api/usersApi"; // make sure path is correct
 
+import { toast } from "react-toastify";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -66,7 +68,7 @@ const Login = () => {
             avatar: data.avatar ?? "https://example.com/img.png",
           })
         );
-    
+        toast.success("Login successfully!...");
         // Redirect
         navigate("/dashboard");
       }

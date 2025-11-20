@@ -7,7 +7,7 @@ import AboutPage from "./pages/About";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import ProtectedRoute from "./components/ProtectedRoute";
-// import MiniDrawer from "./components/Navbar"; // your drawer
+import MiniDrawer from "./components/Navbar"; // your drawer
 import Layout from "./components/layout/layout";
 
 import { ToastContainer } from 'react-toastify';
@@ -30,7 +30,7 @@ function App() {
           element={
             <ProtectedRoute>
               <Layout>
-                {/* <MiniDrawer> */}
+              {/* <MiniDrawer> */}
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/dashboard" element={<HomePage />} />

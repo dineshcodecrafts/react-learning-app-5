@@ -1,60 +1,57 @@
-import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, 
-         DialogContentText, Snackbar, Button, CircularProgress } from "@mui/material";
+import React from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import { toast } from "react-toastify";
+import { logoutUser } from "../api/usersApi";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../api/usersApi"; // your API
 
-const LogoutHandler = ({ open, setOpen }) => {
-  const [loading, setLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState(false);
+export default function LogoutHandler({ open, setOpen }) {
   const navigate = useNavigate();
 
-  const handleLogoutConfirm = async () => {
-    setLoading(true);
-
-    await logoutUser(); // clear token API
-    localStorage.removeItem("token");
-
-    setLoading(false);
+  const handleClose = () => {
     setOpen(false);
-    setSnackbar(true);
+  };
 
-    setTimeout(() => navigate("/login"), 900);
+  const handleConfirmLogout = () => {
+    logoutUser();
+    setOpen(false);
+    toast.error("Logged out successfully!...");
+    
+    // Small delay to show the message before redirect
+    setTimeout(() => {
+      navigate("/login");
+    }, 1000);
   };
 
   return (
-    <>
-      {/* Confirm Dialog */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Confirm Logout</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to logout?
-          </DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-
-          <Button 
-            color="error" 
-            onClick={handleLogoutConfirm} 
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={20} /> : "Logout"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Snackbar */}
-      <Snackbar
-        open={snackbar}
-        autoHideDuration={1500}
-        message="Logged out successfully"
-        onClose={() => setSnackbar(false)}
-      />
-    </>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="logout-dialog-title"
+      aria-describedby="logout-dialog-description"
+    >
+      <DialogTitle id="logout-dialog-title">
+        Confirm Logout
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="logout-dialog-description">
+          Are you sure you want to logout?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleConfirmLogout} color="error" autoFocus>
+          Logout
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
-};
-
-export default LogoutHandler;
+}
