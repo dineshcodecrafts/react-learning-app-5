@@ -6,6 +6,8 @@ import UsersPage from "./pages/Users";
 import AboutPage from "./pages/About";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
+import ProfileAccount from "./pages/ProfileAccount";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 // import MiniDrawer from "./components/Navbar"; // your drawer
 import Layout from "./components/layout/layout";
@@ -17,7 +19,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-
     <>
     <Router>
       <Routes>
@@ -25,6 +26,8 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}
+
+        
         <Route
           path="/*"
           element={
@@ -38,6 +41,9 @@ function App() {
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/AddUser" element={<AddUser />} />
                   <Route path="/EditUser/:id" element={<EditUser />} />
+                  <Route path="/Profile" element={ <ProfileAccount></ProfileAccount>  } />
+
+
                 </Routes>
               {/* </MiniDrawer> */}
               </Layout>
@@ -60,7 +66,6 @@ function App() {
         draggable
         pauseOnHover
         theme="light"
-       
       />
     </>
   );

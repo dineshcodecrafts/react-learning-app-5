@@ -9,11 +9,14 @@ import Chip from "@mui/material/Chip";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 
+import { useNavigate } from "react-router-dom";
+
 export default function UserMenu({ onLogoutClick }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const profile = useSelector((state) => state.users.profile);
 
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +24,11 @@ export default function UserMenu({ onLogoutClick }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleProfilePage = () => {
+    handleClose();
+    navigate("/Profile")
   };
 
   const handleLogoutClick = () => {
@@ -60,7 +68,7 @@ export default function UserMenu({ onLogoutClick }) {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleProfilePage}>
           <PersonIcon sx={{ mr: 1 }} />
           My Account
         </MenuItem>
