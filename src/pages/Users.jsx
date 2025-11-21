@@ -85,6 +85,7 @@ const Users = () => {
 
   return (
     <div style={{ padding: 20 }}>
+      <ProfileBreadcrumbs items={["Home", "Profile Settings", "Profile"]} />
       <ConfirmDialog
         open={dialogState.open}
         title={dialogState.type === "delete" ? "Delete User" : "Edit User"}

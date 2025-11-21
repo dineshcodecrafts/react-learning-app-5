@@ -37,29 +37,31 @@ const Login = () => {
 
   const handleLogin = async () => {
     setError("");
+  
     if (!email || !password) {
       setError("Please enter email and password");
       return;
     }
-
+  
     setLoading(true);
+  
     try {
       const data = await loginUser(email, password);
-    
+  
       if (data.token) {
-        console.log(data);
-        // Example response:
-        // {
-        //   token: "5|L08EJjZfYHLPBubgpwKo6cmM0bvradGD4RxfMyzE2cacddc1",
-        //   name: "John Doe",
-        //   id: 2,
-        //   email: "john@example.com"
-        // }
-    
-        // Save JWT token
+        // Prepare user data
+        const userData = {
+          token: data.token,
+          id: data.id,
+          name: data.name,
+          email: data.email,
+        };
+  
+        // Store in localStorage
+        localStorage.setItem("userDatas", JSON.stringify(userData));
         localStorage.setItem("token", data.token);
-    
-        // Save profile data in Redux
+  
+        // Save in Redux store
         dispatch(
           updateProfile({
             id: data.id,
@@ -68,18 +70,22 @@ const Login = () => {
             avatar: data.avatar ?? "https://example.com/img.png",
           })
         );
+  
         toast.success("Login successfully!...");
+  
         // Redirect
         navigate("/dashboard");
-      }
-     else {
+      } else {
+        // Login failed from API
         setError(data.message || "Login failed");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
     }
+  
     setLoading(false);
   };
+  
 
   return (
     <Grid

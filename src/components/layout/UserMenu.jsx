@@ -15,6 +15,8 @@ export default function UserMenu({ onLogoutClick }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const profile = useSelector((state) => state.users.profile);
 
+  const userData = JSON.parse(localStorage.getItem("userDatas"));
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
@@ -40,7 +42,8 @@ export default function UserMenu({ onLogoutClick }) {
     <div>
       <Stack direction="row" spacing={1} alignItems="center">
         <Chip 
-          label={`Welcome ${profile?.name ?? "Guest"} !..`} 
+          label={`Welcome ${userData?.name || "Guest"} !..`}
+
           sx={{ color: "#fff", borderColor: "#fff" }} 
         />
         <Button
@@ -70,7 +73,7 @@ export default function UserMenu({ onLogoutClick }) {
       >
         <MenuItem onClick={handleProfilePage}>
           <PersonIcon sx={{ mr: 1 }} />
-          My Account
+          My Account 
         </MenuItem>
         <MenuItem onClick={handleLogoutClick}>
           <LogoutIcon sx={{ mr: 1 }} />

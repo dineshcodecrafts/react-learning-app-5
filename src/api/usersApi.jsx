@@ -1,10 +1,8 @@
 
 const API_URL  = `http://127.0.0.1:8000/api`;
-// ⬇️ GLOBAL Dynamic token (automatically updates when login)
-let Auth_key = localStorage.getItem("token")
-  ? `Bearer ${localStorage.getItem("token")}`
-  : null;
 
+const userDatas = JSON.parse(localStorage.getItem("userDatas"));
+let Auth_key = userDatas?.token ? `Bearer ${userDatas.token}` : null;
 
 
 // 🔄 If token changes later (after login), update global variable
