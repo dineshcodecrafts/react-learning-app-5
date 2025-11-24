@@ -16,7 +16,11 @@ import {
   RadioGroup,
   FormLabel,
   Grid,
+  Typography,
+  Card,
+  CardContent,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 
 const AddUser = () => {
   const [form, setForm] = useState({
@@ -31,7 +35,6 @@ const AddUser = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  // Validation
   const validate = () => {
     const temp = {};
     if (!form.name) temp.name = "Name is required";
@@ -47,150 +50,164 @@ const AddUser = () => {
     return Object.keys(temp).length === 0;
   };
 
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    await addUser(form);
-    alert("User added successfully!");
-    navigate("/Users");
+    try {
+      await addUser(form);
+      alert("User added successfully!");
+      navigate("/Users");
+    } catch (err) {
+      console.error("Failed to add user:", err);
+      alert("Failed to add user. Please try again.");
+    }
   };
 
   return (
-    <>
+    <Box sx={{ p: 2, maxWidth: 800, margin: "0 auto" }}>
+      {/* Header */}
+      <Box sx={{ mb: 2 }}>
         <Button
           variant="outlined"
+          startIcon={<ArrowBack />}
           onClick={() => navigate(-1)}
-          sx={{ mb: 2 }}>
-          ← Back
+          sx={{ mb: 1 }}
+          size="small"
+        >
+          Back
         </Button>
-        <h2>Add User</h2>
-        <Box sx={{ p: 3 }}>
+        <Typography variant="h5" fontWeight="600">
+          Add New User
+        </Typography>
+      </Box>
+
+      {/* Form */}
+      <Card elevation={1}>
+        <CardContent sx={{ p: 3 }}>
           <form onSubmit={handleSubmit}>
-            <Stack spacing={2} sx={{ maxWidth: "100%" }}>
-              {/* Two-column Grid for Name and Email (smaller width, separate) */}
-              {/* Two-column Grid for Name and Email (full width in each column) */}
-              <Grid container spacing={2} sx={{ width: '100%' }}>
-                <Grid item xs={12}>
+            <Stack spacing={2}>
+              {/* Basic Information */}
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
                   <TextField
-                    label="Name"
-                    variant="outlined"
+                    label="Full Name"
                     value={form.name}
                     onChange={e => setForm({ ...form, name: e.target.value })}
                     fullWidth
+                    size="small"
                     required
                     error={!!errors.name}
                     helperText={errors.name}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="Email"
-                    variant="outlined"
+                    type="email"
                     value={form.email}
                     onChange={e => setForm({ ...form, email: e.target.value })}
                     fullWidth
+                    size="small"
                     required
                     error={!!errors.email}
                     helperText={errors.email}
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Password"
+                    type="password"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    fullWidth
+                    size="small"
+                    required
+                    error={!!errors.password}
+                    helperText={errors.password}
+                  />
+                </Grid>
               </Grid>
-              {/* Password (full width) */}
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                value={form.password}
-                onChange={(e) =>
-                  setForm({ ...form, password: e.target.value })
-                }
-                fullWidth
-                required
-                error={!!errors.password}
-                helperText={errors.password}
-              />
 
-              {/* Role Dropdown */}
-              <FormControl fullWidth required error={!!errors.role}>
-                <InputLabel id="role-label">Role</InputLabel>
-                <Select
-                  labelId="role-label"
-                  value={form.role}
-                  label="Role"
-                  onChange={(e) => setForm({ ...form, role: e.target.value })}
-                >
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="editor">Editor</MenuItem>
-                  <MenuItem value="viewer">Viewer</MenuItem>
-                </Select>
-                {errors.role && (
-                  <span style={{ color: "red", fontSize: "12px" }}>
-                    {errors.role}
-                  </span>
-                )}
-              </FormControl>
+              {/* Account Settings */}
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth size="small" required error={!!errors.role}>
+                    <InputLabel>Role</InputLabel>
+                    <Select
+                      value={form.role}
+                      label="Role"
+                      onChange={(e) => setForm({ ...form, role: e.target.value })}
+                    >
+                      <MenuItem value="admin">Admin</MenuItem>
+                      <MenuItem value="editor">Editor</MenuItem>
+                      <MenuItem value="viewer">Viewer</MenuItem>
+                    </Select>
+                    {errors.role && (
+                      <Typography variant="caption" color="error" sx={{ mt: 0.5, display: "block" }}>
+                        {errors.role}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <FormControl component="fieldset" required error={!!errors.gender} fullWidth>
+                    <FormLabel component="legend" sx={{ fontSize: '0.875rem', mb: 0.5 }}>
+                      Gender
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      value={form.gender}
+                      onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                    >
+                      <FormControlLabel value="male" control={<Radio size="small" />} label="Male" />
+                      <FormControlLabel value="female" control={<Radio size="small" />} label="Female" />
+                      <FormControlLabel value="other" control={<Radio size="small" />} label="Other" />
+                    </RadioGroup>
+                    {errors.gender && (
+                      <Typography variant="caption" color="error" sx={{ mt: 0.5, display: "block" }}>
+                        {errors.gender}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+              </Grid>
 
-              {/* Active Checkbox */}
+              {/* Account Status */}
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={form.isActive}
-                    onChange={(e) =>
-                      setForm({ ...form, isActive: e.target.checked })
-                    }
+                    onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                    size="small"
                   />
                 }
-                label="Active"
+                label="Active User Account"
               />
 
-              {/* Gender Radio */}
-              <FormControl component="fieldset" required error={!!errors.gender}>
-                <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup
-                  row
-                  value={form.gender}
-                  onChange={(e) =>
-                    setForm({ ...form, gender: e.target.value })
-                  }
+              {/* Actions */}
+              <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end", pt: 1 }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(-1)}
+                  size="small"
                 >
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Male"
-                  />
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="Female"
-                  />
-                  <FormControlLabel
-                    value="other"
-                    control={<Radio />}
-                    label="Other"
-                  />
-                </RadioGroup>
-                {errors.gender && (
-                  <span style={{ color: "red", fontSize: "12px" }}>
-                    {errors.gender}
-                  </span>
-                )}
-              </FormControl>
-
-              {/* Submit Button */}
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ backgroundColor: "#1a5882" }}
-              >
-                Save
-              </Button>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  size="small"
+                >
+                  Create User
+                </Button>
+              </Box>
             </Stack>
           </form>
-        </Box>
-
-    </>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

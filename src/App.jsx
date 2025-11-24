@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 
+// Correct file imports (with )
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import UsersPage from "./pages/users/ListUsers";
@@ -9,8 +10,11 @@ import AddUser from "./pages/users/AddUser";
 import EditUser from "./pages/users/EditUser";
 import ProfileAccount from "./pages/ProfileAccount";
 
+// Protected route
 import ProtectedRoute from "./components/ProtectedRoute";
-import Layout from "./components/layout/layout";
+
+// Correct Layout import (uppercase L)
+import Layout from "./components/layout/Layout";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,7 +34,7 @@ function App() {
             element={
               <ProtectedRoute>
                 <Layout>
-                  <Outlet />   {/* All pages will render here */}
+                  <Outlet /> {/* All pages will render here */}
                 </Layout>
               </ProtectedRoute>
             }

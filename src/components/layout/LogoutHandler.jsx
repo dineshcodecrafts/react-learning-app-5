@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { logoutUser } from "../api/apiClient";
+import { logoutUser } from "../../api/apiClient";
 import { useNavigate } from "react-router-dom";
 
 export default function LogoutHandler({ open, setOpen }) {

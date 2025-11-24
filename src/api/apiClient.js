@@ -5,6 +5,10 @@ const userDatas = JSON.parse(localStorage.getItem("userDatas"));
 let Auth_key = userDatas?.token ? `Bearer ${userDatas.token}` : null;
 
 
+console.log('Auth_key');
+console.log(Auth_key);
+
+
 // 🔄 If token changes later (after login), update global variable
 export const refreshToken = () => {
   Auth_key = localStorage.getItem("token")

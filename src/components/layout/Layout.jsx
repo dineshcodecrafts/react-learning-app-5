@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "./AppBar";
 import Drawer from "./Drawer";
 import UserMenu from "./UserMenu";
-import LogoutHandler from "../LogoutHandler";
+import LogoutHandler from "./LogoutHandler";
 
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
