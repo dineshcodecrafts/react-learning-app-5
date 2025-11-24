@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Login";
+import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import UsersPage from "./pages/Users";
 import AboutPage from "./pages/About";
@@ -22,7 +22,7 @@ function App() {
     <Router>
       <Routes>
         {/* Public Route */}
-        <Route path="/login" element={<Login />} />
+        <Route path="./pages/Login" element={<Login />} />
 
         {/* Protected Routes */}
         <Route

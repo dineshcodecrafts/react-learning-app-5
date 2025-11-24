@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Paper, Typography } from "@mui/material";
 
-export default function PageLayout({ title, children }) {
+export default function PageContainer({ title, children }) {
   return (
     <Box
       className="MuiBox-root"

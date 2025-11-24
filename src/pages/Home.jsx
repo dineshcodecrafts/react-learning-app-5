@@ -10,7 +10,7 @@ import {
 
 import { useSelector } from "react-redux";
 import ProfileBreadcrumbs from "../components/ProfileBreadcrumbs";
-import PageLayout from "./PageLayout";
+import PageContainer from "../components/PageContainer";
 
 const Home = () => {
   // const UserName = useSelector((state) => state.users.name) ;
@@ -19,7 +19,7 @@ const Home = () => {
 
   return (
     <>
-      <PageLayout title="Add New Record">
+      <PageContainer title="Add New Record">
         <Box sx={{ p: 3 }}>
           <ProfileBreadcrumbs items={["Home", "Profile Settings", "Profile"]} />
           <Typography variant="h4" gutterBottom>
@@ -61,7 +61,7 @@ const Home = () => {
             </Grid>
           </Grid>
         </Box>
-      </PageLayout>
+      </PageContainer>
     </>
   );
 };

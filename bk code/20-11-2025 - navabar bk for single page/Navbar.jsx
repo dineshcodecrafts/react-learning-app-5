@@ -25,7 +25,7 @@ import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import { logoutUser } from "../api/usersApi";
+import { logoutUser } from "../api/apiClient";
 
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';

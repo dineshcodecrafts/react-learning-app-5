@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExportPdf from "../../components/ExportPdf";
 
-export default function DataTable({
+export default function UsersTable({
   users,
   handleDelete,
   handleEdit,

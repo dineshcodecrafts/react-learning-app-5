@@ -20,10 +20,10 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUsers, deleteUserById } from "../api/usersApi";
-import { updateCount } from "../Store/CountSlice";
+import { fetchUsers, deleteUserById } from "../api/apiClient";
+import { updateCount } from "../store/CountSlice";
 import ConfirmDialog from "../components/ConfirmDialog";
-import DataTable from "./PageComponents/DataTable";
+import UsersTable from "./users/UsersTable";
 import ProfileBreadcrumbs from '../components/ProfileBreadcrumbs';
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -31,7 +31,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 
-import PageLayout from "./PageLayout";
+import PageContainer from "../components/PageContainer";
 
 const Users = () => {
   // State: users & loading
@@ -265,7 +265,7 @@ const Users = () => {
 
   return (
 
-    <PageLayout title="Add New Record">
+    <PageContainer title="Add New Record">
     <Container 
       maxWidth="xl" 
       sx={{ 
@@ -530,14 +530,14 @@ const Users = () => {
         )}
       </Box>
 
-      {/* DataTable Section - No Border */}
+      {/* UsersTable Section - No Border */}
       <Box
         sx={{
           borderRadius: 0,
           overflow: "hidden",
         }}
       >
-        <DataTable
+        <UsersTable
           users={users}
           loading={loading}
           handleDelete={(id) => openDialog("delete", id)}
@@ -550,7 +550,7 @@ const Users = () => {
         />
       </Box>
     </Container>
-    </PageLayout>
+    </PageContainer>
   );
 };
 

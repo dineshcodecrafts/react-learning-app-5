@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Login";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+
+import Login from "./pages/Login";
 import HomePage from "./pages/Home";
 import UsersPage from "./pages/Users";
 import AboutPage from "./pages/About";
@@ -9,53 +10,47 @@ import EditUser from "./pages/EditUser";
 import ProfileAccount from "./pages/ProfileAccount";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-// import MiniDrawer from "./components/Navbar"; // your drawer
 import Layout from "./components/layout/layout";
 
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
 function App() {
   return (
     <>
-    <Router>
-      <Routes>
-        {/* Public Route */}
-        <Route path="/login" element={<Login />} />
+      <Router>
+        <Routes>
 
-        {/* Protected Routes */}
+          {/* Public Route */}
+          <Route path="/login" element={<Login />} />
 
-        
-        <Route
-          path="/*"
-          element={
-            <ProtectedRoute>
-              <Layout>
-                {/* <MiniDrawer> */}
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/dashboard" element={<HomePage />} />
-                  <Route path="/users" element={<UsersPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/AddUser" element={<AddUser />} />
-                  <Route path="/EditUser/:id" element={<EditUser />} />
-                  <Route path="/Profile" element={ <ProfileAccount></ProfileAccount>  } />
+          {/* Protected Layout (GLOBAL) */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Outlet />   {/* All pages will render here */}
+                </Layout>
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<HomePage />} />
+            <Route path="dashboard" element={<HomePage />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="adduser" element={<AddUser />} />
+            <Route path="edituser/:id" element={<EditUser />} />
+            <Route path="profile" element={<ProfileAccount />} />
+          </Route>
 
+        </Routes>
+      </Router>
 
-                </Routes>
-              {/* </MiniDrawer> */}
-              </Layout>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
-
-    {/* Toast Container for notifications */}
-     {/* Custom Styled Toast Container */}
-     <ToastContainer
+      {/* Toast Container */}
+      <ToastContainer
         position="bottom-right"
         autoClose={2000}
         hideProgressBar={false}

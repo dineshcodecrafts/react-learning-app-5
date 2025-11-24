@@ -13,9 +13,9 @@ import {
 
 
 import { useDispatch } from "react-redux";
-import { updateProfile } from "./Store/CountSlice";
+import { updateProfile } from "../Store/CountSlice";
 
-import { loginUser } from "./api/usersApi"; // make sure path is correct
+import { loginUser } from "../api/apiClient"; // make sure path is correct
 
 import { toast } from "react-toastify";
 
