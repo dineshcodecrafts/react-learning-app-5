@@ -31,6 +31,8 @@ import TuneIcon from "@mui/icons-material/Tune";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 
+import PageLayout from "./PageLayout";
+
 const Users = () => {
   // State: users & loading
   const [users, setUsers] = useState([]);
@@ -262,6 +264,8 @@ const Users = () => {
   );
 
   return (
+
+    <PageLayout title="Add New Record">
     <Container 
       maxWidth="xl" 
       sx={{ 
@@ -323,7 +327,7 @@ const Users = () => {
             mb: { xs: 2, sm: 0 }
           }}>
             <Typography 
-              variant="h4" 
+              variant="h5" 
               fontWeight={700} 
               fontSize={{ xs: "1.5rem", sm: "1.75rem", md: "2.125rem" }}
               gutterBottom
@@ -546,6 +550,7 @@ const Users = () => {
         />
       </Box>
     </Container>
+    </PageLayout>
   );
 };
 
