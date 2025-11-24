@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom
 
 import Login from "./pages/Login";
 import HomePage from "./pages/Home";
-import UsersPage from "./pages/Users";
+import UsersPage from "./pages/users/ListUsers";
 import AboutPage from "./pages/About";
-import AddUser from "./pages/AddUser";
-import EditUser from "./pages/EditUser";
+import AddUser from "./pages/users/AddUser";
+import EditUser from "./pages/users/EditUser";
 import ProfileAccount from "./pages/ProfileAccount";
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -14,8 +14,6 @@ import Layout from "./components/layout/layout";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-
 
 function App() {
   return (

@@ -20,18 +20,18 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUsers, deleteUserById } from "../api/apiClient";
-import { updateCount } from "../store/CountSlice";
-import ConfirmDialog from "../components/ConfirmDialog";
-import UsersTable from "./users/UsersTable";
-import ProfileBreadcrumbs from '../components/ProfileBreadcrumbs';
+import { fetchUsers, deleteUserById } from "../../api/apiClient";
+import { updateCount } from "../../store/CountSlice";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import UsersTable from "./UsersTable";
+import ProfileBreadcrumbs from '../../components/ProfileBreadcrumbs';
 import ClearIcon from "@mui/icons-material/Clear";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import TuneIcon from "@mui/icons-material/Tune";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 
-import PageContainer from "../components/PageContainer";
+import PageContainer from "../../components/PageContainer";
 
 const Users = () => {
   // State: users & loading

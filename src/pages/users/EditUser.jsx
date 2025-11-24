@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUserById, updateUser } from "../api/apiClient";
+import { getUserById, updateUser } from "../../api/apiClient";
 import { useNavigate, useParams } from "react-router-dom";
 
 // MUI Imports
