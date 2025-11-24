@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import { addUser } from "../../api/apiClient";
 import { useNavigate } from "react-router-dom";
 import {
-  TextField,
   Button,
   Box,
-  Stack,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  FormLabel,
-  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Container,
 } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import UserForm from "./UserForm";
 
 const AddUser = () => {
   const [form, setForm] = useState({
@@ -24,173 +18,133 @@ const AddUser = () => {
     email: "",
     password: "",
     role: "",
-    isActive: false,
+    isActive: true,
     gender: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  // Validation
-  const validate = () => {
-    const temp = {};
-    if (!form.name) temp.name = "Name is required";
-    if (!form.email) {
-      temp.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      temp.email = "Email is not valid";
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Valid email is required";
     }
-    if (!form.password) temp.password = "Password is required";
-    if (!form.role) temp.role = "Role is required";
-    if (!form.gender) temp.gender = "Gender is required";
-    setErrors(temp);
-    return Object.keys(temp).length === 0;
+    
+    if (!form.password) newErrors.password = "Password is required";
+    if (!form.role) newErrors.role = "Role is required";
+    if (!form.gender) newErrors.gender = "Gender is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    
+    if (!validateForm()) return;
 
-    await addUser(form);
-    alert("User added successfully!");
-    navigate("/Users");
+    setSubmitting(true);
+    try {
+      await addUser(form);
+      alert("User added successfully!");
+      navigate("/Users");
+    } catch (error) {
+      console.error("Failed to add user:", error);
+      alert("Failed to add user. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleFormChange = (newForm) => {
+    setForm(newForm);
+    // Clear errors when user starts typing in a field that had an error
+    const fieldWithError = Object.keys(errors).find(key => newForm[key] !== form[key]);
+    if (fieldWithError && errors[fieldWithError]) {
+      const newErrors = { ...errors };
+      delete newErrors[fieldWithError];
+      setErrors(newErrors);
+    }
   };
 
   return (
-    <>
-        <Button
-          variant="outlined"
-          onClick={() => navigate(-1)}
-          sx={{ mb: 2 }}>
-          ← Back
-        </Button>
-        <h2>Add User</h2>
-        <Box sx={{ p: 3 }}>
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={2} sx={{ maxWidth: "100%" }}>
-              {/* Two-column Grid for Name and Email (smaller width, separate) */}
-              {/* Two-column Grid for Name and Email (full width in each column) */}
-              <Grid container spacing={2} sx={{ width: '100%' }}>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Name"
-                    variant="outlined"
-                    value={form.name}
-                    onChange={e => setForm({ ...form, name: e.target.value })}
-                    fullWidth
-                    required
-                    error={!!errors.name}
-                    helperText={errors.name}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Email"
-                    variant="outlined"
-                    value={form.email}
-                    onChange={e => setForm({ ...form, email: e.target.value })}
-                    fullWidth
-                    required
-                    error={!!errors.email}
-                    helperText={errors.email}
-                  />
-                </Grid>
-              </Grid>
-              {/* Password (full width) */}
-              <TextField
-                label="Password"
-                type="password"
-                variant="outlined"
-                value={form.password}
-                onChange={(e) =>
-                  setForm({ ...form, password: e.target.value })
-                }
-                fullWidth
-                required
-                error={!!errors.password}
-                helperText={errors.password}
-              />
 
-              {/* Role Dropdown */}
-              <FormControl fullWidth required error={!!errors.role}>
-                <InputLabel id="role-label">Role</InputLabel>
-                <Select
-                  labelId="role-label"
-                  value={form.role}
-                  label="Role"
-                  onChange={(e) => setForm({ ...form, role: e.target.value })}
-                >
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="editor">Editor</MenuItem>
-                  <MenuItem value="viewer">Viewer</MenuItem>
-                </Select>
-                {errors.role && (
-                  <span style={{ color: "red", fontSize: "12px" }}>
-                    {errors.role}
-                  </span>
-                )}
-              </FormControl>
 
-              {/* Active Checkbox */}
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={form.isActive}
-                    onChange={(e) =>
-                      setForm({ ...form, isActive: e.target.checked })
-                    }
-                  />
-                }
-                label="Active"
-              />
-
-              {/* Gender Radio */}
-              <FormControl component="fieldset" required error={!!errors.gender}>
-                <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup
-                  row
-                  value={form.gender}
-                  onChange={(e) =>
-                    setForm({ ...form, gender: e.target.value })
-                  }
-                >
-                  <FormControlLabel
-                    value="male"
-                    control={<Radio />}
-                    label="Male"
-                  />
-                  <FormControlLabel
-                    value="female"
-                    control={<Radio />}
-                    label="Female"
-                  />
-                  <FormControlLabel
-                    value="other"
-                    control={<Radio />}
-                    label="Other"
-                  />
-                </RadioGroup>
-                {errors.gender && (
-                  <span style={{ color: "red", fontSize: "12px" }}>
-                    {errors.gender}
-                  </span>
-                )}
-              </FormControl>
-
-              {/* Submit Button */}
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ backgroundColor: "#1a5882" }}
-              >
-                Save
-              </Button>
-            </Stack>
-          </form>
+    <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
+      <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
+        {/* Header */}
+        <Box sx={{ mb: 3, width: "100%" }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate(-1)}
+            sx={{ mb: 2, color: "text.secondary", textTransform: "none" }}
+          >
+            Back to Users
+          </Button>
+          <Typography variant="h4" fontWeight={600} gutterBottom>
+            Add New User
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Create a new user account with appropriate permissions
+          </Typography>
         </Box>
 
-    </>
+        {/* Form */}
+        <Card elevation={2} sx={{ borderRadius: 2, width: "100%" }}>
+          <CardContent sx={{ p: 4 }}>
+            <form onSubmit={handleSubmit}>
+              <UserForm
+                form={form}
+                errors={errors}
+                onChange={handleFormChange}
+                mode="add"
+                submitting={submitting}
+              />
+              
+              {/* Actions */}
+              <Box sx={{ 
+                display: "flex", 
+                gap: 2, 
+                justifyContent: "flex-end",
+                pt: 3,
+                borderTop: 1,
+                borderColor: 'divider',
+                mt: 3
+              }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(-1)}
+                  disabled={submitting}
+                  sx={{ textTransform: "none", minWidth: 120 }}
+                  size="large"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={submitting}
+                  sx={{ 
+                    textTransform: "none",
+                    minWidth: 150
+                  }}
+                  size="large"
+                >
+                  {submitting ? "Creating..." : "Create User"}
+                </Button>
+              </Box>
+            </form>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

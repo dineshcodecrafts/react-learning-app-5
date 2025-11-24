@@ -2,27 +2,16 @@ import React, { useEffect, useState } from "react";
 import { getUserById, updateUser } from "../../api/apiClient";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  TextField,
   Button,
   Box,
-  Stack,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  FormLabel,
-  Grid,
   Typography,
   Card,
   CardContent,
-  Divider,
+  Container,
   CircularProgress,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import UserForm from "./UserForm";
 
 const EditUser = () => {
   const [form, setForm] = useState({
@@ -41,232 +30,139 @@ const EditUser = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Load user data
   useEffect(() => {
-    const fetchUser = async () => {
+    const loadUserData = async () => {
       try {
-        const data = await getUserById(id);
+        const userData = await getUserById(id);
         setForm({
-          name: data.name || "",
-          email: data.email || "",
-          password: "", // optional: blank password
-          role: data.role || "",
-          isActive: data.isActive || false,
-          gender: data.gender || "",
+          name: userData.name || "",
+          email: userData.email || "",
+          password: "",
+          role: userData.role || "",
+          isActive: userData.isActive || false,
+          gender: userData.gender || "",
         });
-      } catch (err) {
-        console.error("Failed to load user:", err);
+      } catch (error) {
+        console.error("Failed to load user:", error);
         alert("Failed to load user data");
       } finally {
         setLoading(false);
       }
     };
-    fetchUser();
+
+    loadUserData();
   }, [id]);
 
-  // Validation
-  const validate = () => {
-    const temp = {};
-    if (!form.name) temp.name = "Name is required";
-    if (!form.email) {
-      temp.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      temp.email = "Email is not valid";
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Valid email is required";
     }
-    if (!form.role) temp.role = "Role is required";
-    if (!form.gender) temp.gender = "Gender is required";
+    
+    if (!form.role) newErrors.role = "Role is required";
+    if (!form.gender) newErrors.gender = "Gender is required";
 
-    setErrors(temp);
-    return Object.keys(temp).length === 0;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    
+    if (!validateForm()) return;
 
     setSubmitting(true);
     try {
       await updateUser(id, form);
       alert("User updated successfully!");
       navigate("/Users");
-    } catch (err) {
-      console.error("Failed to update user:", err);
+    } catch (error) {
+      console.error("Failed to update user:", error);
       alert("Failed to update user. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleFormChange = (newForm) => {
+    setForm(newForm);
+    // Clear errors when user starts typing in a field that had an error
+    const fieldWithError = Object.keys(errors).find(key => newForm[key] !== form[key]);
+    if (fieldWithError && errors[fieldWithError]) {
+      const newErrors = { ...errors };
+      delete newErrors[fieldWithError];
+      setErrors(newErrors);
+    }
+  };
+
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
-        <CircularProgress />
+      <Box sx={{ 
+        width: "100%", 
+        minHeight: "100vh",
+        display: "flex", 
+        justifyContent: "center", 
+        alignItems: "center",
+        bgcolor: "background.default"
+      }}>
+        <CircularProgress size={60} />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1200, margin: "0 auto" }}>
-      {/* Header Section */}
-      <Box sx={{ mb: 4 }}>
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBack />}
-          onClick={() => navigate(-1)}
-          sx={{ mb: 2, textTransform: "none" }}
-        >
-          Back
-        </Button>
-        <Typography variant="h4" component="h1" fontWeight="600" color="primary">
-          Edit User
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Update user information and account settings
-        </Typography>
-      </Box>
+    <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
+      <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
+        {/* Header */}
+        <Box sx={{ mb: 3, width: "100%" }}>
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate(-1)}
+            sx={{ mb: 2, color: "text.secondary", textTransform: "none" }}
+          >
+            Back to Users
+          </Button>
+          <Typography variant="h4" fontWeight={600} gutterBottom>
+            Edit User
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Update user information and permissions
+          </Typography>
+        </Box>
 
-      {/* Form Section */}
-      <Card elevation={2} sx={{ borderRadius: 2 }}>
-        <CardContent sx={{ p: 4 }}>
-          <form onSubmit={handleSubmit}>
-            <Stack spacing={4}>
-              {/* Basic Information Section */}
-              <Box>
-                <Typography variant="h6" fontWeight="600" sx={{ mb: 3, color: "primary.main" }}>
-                  Basic Information
-                </Typography>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Full Name"
-                      variant="outlined"
-                      value={form.name}
-                      onChange={e => setForm({ ...form, name: e.target.value })}
-                      fullWidth
-                      required
-                      error={!!errors.name}
-                      helperText={errors.name}
-                      placeholder="Enter full name"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Email Address"
-                      variant="outlined"
-                      type="email"
-                      value={form.email}
-                      onChange={e => setForm({ ...form, email: e.target.value })}
-                      fullWidth
-                      required
-                      error={!!errors.email}
-                      helperText={errors.email}
-                      placeholder="user@example.com"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Password"
-                      type="password"
-                      variant="outlined"
-                      value={form.password}
-                      onChange={(e) => setForm({ ...form, password: e.target.value })}
-                      fullWidth
-                      helperText="Leave blank to keep current password"
-                      placeholder="Enter new password to change"
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-
-              <Divider />
-
-              {/* Account Settings Section */}
-              <Box>
-                <Typography variant="h6" fontWeight="600" sx={{ mb: 3, color: "primary.main" }}>
-                  Account Settings
-                </Typography>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <FormControl fullWidth required error={!!errors.role}>
-                      <InputLabel id="role-label">User Role</InputLabel>
-                      <Select
-                        labelId="role-label"
-                        value={form.role}
-                        label="User Role"
-                        onChange={(e) => setForm({ ...form, role: e.target.value })}
-                      >
-                        <MenuItem value="admin">Administrator</MenuItem>
-                        <MenuItem value="editor">Editor</MenuItem>
-                        <MenuItem value="viewer">Viewer</MenuItem>
-                      </Select>
-                      {errors.role && (
-                        <Typography variant="caption" color="error" sx={{ mt: 1, display: "block" }}>
-                          {errors.role}
-                        </Typography>
-                      )}
-                    </FormControl>
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <FormControl component="fieldset" required error={!!errors.gender} fullWidth>
-                      <FormLabel component="legend" sx={{ mb: 1, fontWeight: 500 }}>
-                        Gender
-                      </FormLabel>
-                      <RadioGroup
-                        row
-                        value={form.gender}
-                        onChange={(e) => setForm({ ...form, gender: e.target.value })}
-                      >
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                        <FormControlLabel value="other" control={<Radio />} label="Other" />
-                      </RadioGroup>
-                      {errors.gender && (
-                        <Typography variant="caption" color="error" sx={{ mt: 1, display: "block" }}>
-                          {errors.gender}
-                        </Typography>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Box>
-
-              <Divider />
-
-              {/* Account Status */}
-              <Box>
-                <Typography variant="h6" fontWeight="600" sx={{ mb: 2, color: "primary.main" }}>
-                  Account Status
-                </Typography>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={form.isActive}
-                      onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-                      color="primary"
-                    />
-                  }
-                  label={
-                    <Box>
-                      <Typography variant="body1" fontWeight="500">
-                        Activate User Account
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        User will be able to access the system immediately
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </Box>
-
-              {/* Action Buttons */}
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", pt: 2 }}>
+        {/* Form */}
+        <Card elevation={2} sx={{ borderRadius: 2, width: "100%" }}>
+          <CardContent sx={{ p: 4 }}>
+            <form onSubmit={handleSubmit}>
+              <UserForm
+                form={form}
+                errors={errors}
+                onChange={handleFormChange}
+                mode="edit"
+                submitting={submitting}
+              />
+              
+              {/* Actions */}
+              <Box sx={{ 
+                display: "flex", 
+                gap: 2, 
+                justifyContent: "flex-end",
+                pt: 3,
+                borderTop: 1,
+                borderColor: 'divider',
+                mt: 3
+              }}>
                 <Button
                   variant="outlined"
                   onClick={() => navigate(-1)}
                   disabled={submitting}
-                  sx={{ textTransform: "none", px: 4 }}
+                  sx={{ textTransform: "none", minWidth: 120 }}
+                  size="large"
                 >
                   Cancel
                 </Button>
@@ -275,23 +171,18 @@ const EditUser = () => {
                   type="submit"
                   disabled={submitting}
                   sx={{ 
-                    textTransform: "none", 
-                    px: 4,
-                    background: "linear-gradient(45deg, #1a5882 30%, #2c77b1 90%)",
-                    "&:hover": {
-                      background: "linear-gradient(45deg, #14476b 30%, #1a5882 90%)",
-                    }
+                    textTransform: "none",
+                    minWidth: 150
                   }}
                   size="large"
-                  startIcon={submitting ? <CircularProgress size={20} /> : null}
                 >
                   {submitting ? "Updating..." : "Update User"}
                 </Button>
               </Box>
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
+            </form>
+          </CardContent>
+        </Card>
+      </Container>
     </Box>
   );
 };
