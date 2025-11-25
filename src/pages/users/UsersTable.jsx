@@ -86,6 +86,24 @@ export default function UsersTable({
       ),
     },
     {
+      field: "role",
+      headerName: "Role",
+      width: isSmallMobile ? 100 : isMobile ? 150 : 200,
+      minWidth: isSmallMobile ? 80 : 100,
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: isSmallMobile ? "0.75rem" : "0.875rem",
+            fontWeight: 500,
+            color: "black",
+          }}
+        >
+          {params.value}
+        </Typography>
+      ),
+    },
+    {
       field: "actions",
       headerName: "Actions",
       width: isSmallMobile ? 120 : isMobile ? 150 : 200,

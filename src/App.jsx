@@ -18,6 +18,7 @@ import Layout from "./components/layout/Layout";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ImageUpload from "./pages/ImageUpload";
 
 function App() {
   return (
@@ -46,6 +47,10 @@ function App() {
             <Route path="adduser" element={<AddUser />} />
             <Route path="edituser/:id" element={<EditUser />} />
             <Route path="profile" element={<ProfileAccount />} />
+
+            <Route path="upload" element={<ImageUpload />} />
+
+            
           </Route>
 
         </Routes>
