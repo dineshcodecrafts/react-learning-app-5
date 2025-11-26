@@ -14,6 +14,9 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
 
+import CustomSnackbar from "../../components/CustomSnackbar";
+
+
 const AddUser = () => {
   const [form, setForm] = useState({
     name: "",
@@ -78,18 +81,16 @@ const AddUser = () => {
     }
 
     try {
-
-      // console.log('formData');
-      // console.log(formData);
       const result = await addUser(formData);
+    
       setSnackbar({
         open: true,
         message: "User created successfully!",
         severity: "success",
       });
-
+    
       setTimeout(() => navigate("/Users"), 800);
-
+    
     } catch (error) {
       setSnackbar({
         open: true,
@@ -97,7 +98,7 @@ const AddUser = () => {
         severity: "error",
       });
     }
-
+    
     setSubmitting(false);
   };
 
@@ -191,17 +192,13 @@ const AddUser = () => {
         </Card>
       </Container>
 
-      {/* Snackbar Notification */}
-      <Snackbar
+      <CustomSnackbar
         open={snackbar.open}
-        autoHideDuration={3000}
+        message={snackbar.message}
+        severity={snackbar.severity}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert severity={snackbar.severity} variant="filled">
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+      />
+
     </Box>
   );
 };

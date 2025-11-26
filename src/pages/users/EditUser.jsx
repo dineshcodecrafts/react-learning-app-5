@@ -5,15 +5,13 @@ import {
   Button,
   Box,
   Typography,
-  Card,
-  CardContent,
-  Container,
   CircularProgress,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
 
 import PageContainer from "../../components/PageContainer";
+import CustomSnackbar from "../../components/CustomSnackbar";
 
 const EditUser = () => {
   const [form, setForm] = useState({
@@ -28,6 +26,11 @@ const EditUser = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -81,11 +84,21 @@ const EditUser = () => {
     setSubmitting(true);
     try {
       await updateUser(id, form);
-      alert("User updated successfully!");
-      navigate("/Users");
+      setSnackbar({
+        open: true,
+        message: "User Updated successfully!",
+        severity: "success",
+      });
+    
+      setTimeout(() => navigate("/Users"), 900);
+
     } catch (error) {
       console.error("Failed to update user:", error);
-      alert("Failed to update user. Please try again.");
+      setSnackbar({
+        open: true,
+        message: "Failed to update user. Please try again.",
+        severity: "error",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -118,80 +131,72 @@ const EditUser = () => {
   }
 
   return (
-    <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
-      <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
-        {/* Header */}
+    <PageContainer title="Edit User">
+      <Box sx={{ mb: 3 }}>
+        <Button
+          startIcon={<ArrowBack />}
+          onClick={() => navigate(-1)}
+          sx={{ mb: 2, color: "text.secondary", textTransform: "none" }}
+        >
+          Back to Users
+        </Button>
+        <Typography variant="h4" fontWeight={600} gutterBottom>
+          Edit User
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Update user information and permissions
+        </Typography>
+      </Box>
 
-        <PageContainer title="Edit User"> 
-        <Box sx={{ mb: 3, width: "100%" }}>
+      <form onSubmit={handleSubmit}>
+        <UserForm
+          form={form}
+          errors={errors}
+          onChange={handleFormChange}
+          mode="edit"
+          submitting={submitting}
+        />
+        
+        <Box sx={{ 
+          display: "flex", 
+          gap: 2, 
+          justifyContent: "flex-end",
+          pt: 3,
+          borderTop: 1,
+          borderColor: 'divider',
+          mt: 3
+        }}>
           <Button
-            startIcon={<ArrowBack />}
+            variant="outlined"
             onClick={() => navigate(-1)}
-            sx={{ mb: 2, color: "text.secondary", textTransform: "none" }}
+            disabled={submitting}
+            sx={{ textTransform: "none", minWidth: 120 }}
+            size="large"
           >
-            Back to Users
+            Cancel
           </Button>
-
-      
-          <Typography variant="h4" fontWeight={600} gutterBottom>
-            Edit User
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Update user information and permissions
-          </Typography>
+          <Button
+            variant="contained"
+            type="submit"
+            disabled={submitting}
+            sx={{ 
+              textTransform: "none",
+              minWidth: 150
+            }}
+            size="large"
+          >
+            {submitting ? "Updating..." : "Update User"}
+          </Button>
         </Box>
+      </form>
 
-        {/* Form */}
-        <Card elevation={2} sx={{ borderRadius: 2, width: "100%" }}>
-          <CardContent sx={{ p: 4 }}>
-
-            <form onSubmit={handleSubmit}>
-              <UserForm
-                form={form}
-                errors={errors}
-                onChange={handleFormChange}
-                mode="edit"
-                submitting={submitting}
-              />
-              
-              {/* Actions */}
-              <Box sx={{ 
-                display: "flex", 
-                gap: 2, 
-                justifyContent: "flex-end",
-                pt: 3,
-                borderTop: 1,
-                borderColor: 'divider',
-                mt: 3
-              }}>
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate(-1)}
-                  disabled={submitting}
-                  sx={{ textTransform: "none", minWidth: 120 }}
-                  size="large"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={submitting}
-                  sx={{ 
-                    textTransform: "none",
-                    minWidth: 150
-                  }}
-                  size="large"
-                >
-                  {submitting ? "Updating..." : "Update User"}
-                </Button>
-              </Box>
-            </form>
-          </CardContent>
-        </Card>
-        </PageContainer>
-      </Container>
-    </Box>
+      <CustomSnackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      />
+    </PageContainer>
   );
 };
 
