@@ -47,7 +47,7 @@ const UserForm = ({
       <Grid container spacing={3}>
         
         {/* Name */}
-        <Grid item xs={12} md={6}>
+        <Grid size={6}>
           <TextField
             fullWidth
             label="Full Name"
@@ -62,7 +62,7 @@ const UserForm = ({
         </Grid>
 
         {/* Email */}
-        <Grid item xs={12} md={6}>
+        <Grid size={6}>
           <TextField
             fullWidth
             label="Email Address"
@@ -78,7 +78,7 @@ const UserForm = ({
         </Grid>
 
         {/* Password */}
-        <Grid item xs={12} md={4}>
+        <Grid size={6}>
           <TextField
             fullWidth
             label="Password"
@@ -102,7 +102,7 @@ const UserForm = ({
         </Grid>
 
         {/* Role */}
-        <Grid item xs={12} md={4}>
+        <Grid size={6}>
           <FormControl
             fullWidth
             size="medium"
@@ -125,12 +125,13 @@ const UserForm = ({
         </Grid>
 
         {/* Profile Photo */}
-        <Grid item xs={12} md={4}>
-          <Box>
+        <Grid size={6}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <Button
               component="label"
               variant="contained"
               startIcon={<CloudUploadIcon />}
+              sx={{ mb: 1 }}
             >
               Upload Profile Photo
               <input
@@ -140,10 +141,8 @@ const UserForm = ({
                 onChange={handleFileChange}
               />
             </Button>
-
-            {/* Display Selected File Name */}
             {form.profile_photo && (
-              <Typography variant="body2" sx={{ mt: 1 }}>
+              <Typography variant="body2" color="text.secondary">
                 Selected: {form.profile_photo.name}
               </Typography>
             )}
@@ -151,7 +150,7 @@ const UserForm = ({
         </Grid>
 
         {/* Gender */}
-        <Grid item xs={12}>
+        <Grid isize={8}>
           <FormControl
             fullWidth
             required
@@ -159,21 +158,15 @@ const UserForm = ({
             disabled={submitting}
           >
             <FormLabel sx={{ mb: 1 }}>Gender</FormLabel>
-
             <RadioGroup
               row
               value={form.gender}
               onChange={(e) => handleFieldChange("gender", e.target.value)}
             >
               <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Female"
-              />
+              <FormControlLabel value="female" control={<Radio />} label="Female" />
               <FormControlLabel value="other" control={<Radio />} label="Other" />
             </RadioGroup>
-
             {errors.gender && (
               <FormHelperText error>{errors.gender}</FormHelperText>
             )}
@@ -181,23 +174,25 @@ const UserForm = ({
         </Grid>
 
         {/* Active Status */}
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={form.isActive}
-                onChange={(e) =>
-                  handleFieldChange("isActive", e.target.checked)
-                }
-                disabled={submitting}
-              />
-            }
-            label={
-              mode === "add"
-                ? "Activate user account immediately"
-                : "User account is active"
-            }
-          />
+        <Grid size={8}>
+          <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', pt: 2 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={form.isActive}
+                  onChange={(e) =>
+                    handleFieldChange("isActive", e.target.checked)
+                  }
+                  disabled={submitting}
+                />
+              }
+              label={
+                mode === "add"
+                  ? "Activate user account immediately"
+                  : "User account is active"
+              }
+            />
+          </Box>
         </Grid>
       </Grid>
     </form>

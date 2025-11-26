@@ -13,6 +13,8 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
 
+import PageContainer from "../../components/PageContainer";
+
 const EditUser = () => {
   const [form, setForm] = useState({
     name: "",
@@ -119,6 +121,8 @@ const EditUser = () => {
     <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
       <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
         {/* Header */}
+
+        <PageContainer title="Edit User"> 
         <Box sx={{ mb: 3, width: "100%" }}>
           <Button
             startIcon={<ArrowBack />}
@@ -127,6 +131,8 @@ const EditUser = () => {
           >
             Back to Users
           </Button>
+
+      
           <Typography variant="h4" fontWeight={600} gutterBottom>
             Edit User
           </Typography>
@@ -138,6 +144,7 @@ const EditUser = () => {
         {/* Form */}
         <Card elevation={2} sx={{ borderRadius: 2, width: "100%" }}>
           <CardContent sx={{ p: 4 }}>
+
             <form onSubmit={handleSubmit}>
               <UserForm
                 form={form}
@@ -182,6 +189,7 @@ const EditUser = () => {
             </form>
           </CardContent>
         </Card>
+        </PageContainer>
       </Container>
     </Box>
   );
