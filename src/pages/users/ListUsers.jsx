@@ -1,23 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  Box,
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  useTheme,
-  useMediaQuery,
-  Grid,
-  Alert,
-  Snackbar,
-  Chip,
-  MenuItem,
-  InputAdornment,
-  IconButton,
-  Drawer,
-  Divider,
-} from "@mui/material";
+import { Box, Container, TextField, Button, Typography, Paper, useTheme, useMediaQuery, Grid, Alert, Snackbar, Chip, MenuItem, InputAdornment, IconButton, Drawer, Divider } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchUsers, deleteUserById } from "../../api/apiClient";
@@ -25,11 +8,7 @@ import { updateCount } from "../../store/CountSlice";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import UsersTable from "./UsersTable";
 import ProfileBreadcrumbs from '../../components/ProfileBreadcrumbs';
-import ClearIcon from "@mui/icons-material/Clear";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import TuneIcon from "@mui/icons-material/Tune";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
+import { Clear as ClearIcon, FilterList as FilterListIcon, Tune as TuneIcon, Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 
 import PageContainer from "../../components/PageContainer";
 

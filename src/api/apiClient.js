@@ -71,18 +71,20 @@ export const getUserById = async (id) => {
 
 
 // Add user
-export const addUser = async (userData) => {
+export const addUser = async (formData) => {
   const response = await fetch(`${API_URL}/store`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `${Auth_key}`,
       Accept: "application/json",
+
     },
-    body: JSON.stringify(userData),
+    body: formData, // <-- must be FormData
   });
+
   return await response.json();
 };
+
 
 // Update user
 export const updateUser = async (id, userData) => {

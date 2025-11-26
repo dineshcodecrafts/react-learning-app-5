@@ -1,24 +1,58 @@
-import React from "react";
-import {TextField,FormControl,InputLabel,Select,MenuItem,FormControlLabel,Checkbox,Radio,RadioGroup,FormLabel,Grid,FormHelperText,} from "@mui/material";
+import React, { useState } from "react";
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  FormLabel,
+  Grid,
+  FormHelperText,
+  Button,
+  Box,
+  Typography,
+} from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
+const UserForm = ({
+  form,
+  errors,
+  onChange,
+  mode = "add",
+  submitting = false,
+}) => {
+  const [fileName, setFileName] = useState("");
 
+  // Handle Input Fields
   const handleFieldChange = (field, value) => {
     onChange({ ...form, [field]: value });
+  };
+
+  // Handle File Upload
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      handleFieldChange("profile_photo", file);
+      setFileName(file.name);
+    }
   };
 
   return (
     <form>
       <Grid container spacing={3}>
+        
         {/* Name */}
-        <Grid  size={6}>
+        <Grid item xs={12} md={6}>
           <TextField
-          sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
-            label="Full Namee"
+            fullWidth
+            label="Full Name"
             value={form.name}
             onChange={(e) => handleFieldChange("name", e.target.value)}
-            fullWidth
-            size="medium"
             required
             error={!!errors.name}
             helperText={errors.name}
@@ -28,15 +62,13 @@ const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
         </Grid>
 
         {/* Email */}
-        <Grid size={6}>
+        <Grid item xs={12} md={6}>
           <TextField
-            sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
+            fullWidth
             label="Email Address"
             type="email"
             value={form.email}
             onChange={(e) => handleFieldChange("email", e.target.value)}
-            fullWidth
-            size="large"
             required
             error={!!errors.email}
             helperText={errors.email}
@@ -46,14 +78,13 @@ const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
         </Grid>
 
         {/* Password */}
-        <Grid size={6}>
+        <Grid item xs={12} md={4}>
           <TextField
+            fullWidth
             label="Password"
             type="password"
             value={form.password}
             onChange={(e) => handleFieldChange("password", e.target.value)}
-            fullWidth
-            size="medium"
             required={mode === "add"}
             error={!!errors.password}
             helperText={
@@ -70,47 +101,64 @@ const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
           />
         </Grid>
 
-        {/* Role - FIXED */}
-        <Grid size={6}>
-        <FormControl
-          fullWidth
-          sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
-          size="medium"
-          required
-          error={!!errors.role}
-          disabled={submitting}
-        >
-          <InputLabel id="role-select-label">User Role</InputLabel>
-          <Select
-            labelId="role-select-label"
-            value={form.role}
-            label="User Role"
-            onChange={(e) => handleFieldChange("role", e.target.value)}
+        {/* Role */}
+        <Grid item xs={12} md={4}>
+          <FormControl
+            fullWidth
+            size="medium"
+            required
+            error={!!errors.role}
+            disabled={submitting}
           >
-            <MenuItem value="admin">Administrator</MenuItem>
-            <MenuItem value="editor">Editor</MenuItem>
-            <MenuItem value="viewer">Viewer</MenuItem>
-          </Select>
-          {errors.role && <FormHelperText error>{errors.role}</FormHelperText>}
-        </FormControl>
+            <InputLabel>User Role</InputLabel>
+            <Select
+              value={form.role}
+              label="User Role"
+              onChange={(e) => handleFieldChange("role", e.target.value)}
+            >
+              <MenuItem value="admin">Administrator</MenuItem>
+              <MenuItem value="editor">Editor</MenuItem>
+              <MenuItem value="viewer">Viewer</MenuItem>
+            </Select>
+            {errors.role && <FormHelperText error>{errors.role}</FormHelperText>}
+          </FormControl>
+        </Grid>
+
+        {/* Profile Photo */}
+        <Grid item xs={12} md={4}>
+          <Box>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload Profile Photo
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </Button>
+
+            {/* Display Selected File Name */}
+            {form.profile_photo && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                Selected: {form.profile_photo.name}
+              </Typography>
+            )}
+          </Box>
         </Grid>
 
         {/* Gender */}
-        <Grid  size={12}>
+        <Grid item xs={12}>
           <FormControl
-          sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
-            component="fieldset"
+            fullWidth
             required
             error={!!errors.gender}
-            fullWidth
             disabled={submitting}
           >
-            <FormLabel
-              component="legend"
-              sx={{ fontSize: "1rem", mb: 2, fontWeight: 500 }}
-            >
-              Gender
-            </FormLabel>
+            <FormLabel sx={{ mb: 1 }}>Gender</FormLabel>
 
             <RadioGroup
               row
@@ -123,12 +171,9 @@ const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
                 control={<Radio />}
                 label="Female"
               />
-              <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Other"
-              />
+              <FormControlLabel value="other" control={<Radio />} label="Other" />
             </RadioGroup>
+
             {errors.gender && (
               <FormHelperText error>{errors.gender}</FormHelperText>
             )}
@@ -155,8 +200,6 @@ const UserForm = ({form,errors,onChange,mode = "add",submitting = false, }) => {
           />
         </Grid>
       </Grid>
-
-      
     </form>
   );
 };

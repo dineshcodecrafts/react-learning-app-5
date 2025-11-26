@@ -8,6 +8,8 @@ import {
   Card,
   CardContent,
   Container,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
@@ -17,6 +19,7 @@ const AddUser = () => {
     name: "",
     email: "",
     password: "",
+    profile_photo: null,
     role: "",
     isActive: true,
     gender: "",
@@ -24,19 +27,25 @@ const AddUser = () => {
 
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
   const navigate = useNavigate();
 
+  // -------------------------------
+  // FORM VALIDATION
+  // -------------------------------
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!form.name.trim()) newErrors.name = "Name is required";
-    
-    if (!form.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
       newErrors.email = "Valid email is required";
-    }
-    
+
     if (!form.password) newErrors.password = "Password is required";
     if (!form.role) newErrors.role = "Role is required";
     if (!form.gender) newErrors.gender = "Gender is required";
@@ -45,42 +54,80 @@ const AddUser = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // -------------------------------
+  // HANDLE SUBMIT
+  // -------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setSubmitting(true);
-    try {
-      await addUser(form);
-      alert("User added successfully!");
-      navigate("/Users");
-    } catch (error) {
-      console.error("Failed to add user:", error);
-      alert("Failed to add user. Please try again.");
-    } finally {
-      setSubmitting(false);
+
+    // Prepare FormData
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("password", form.password);
+    formData.append("role", form.role);
+    formData.append("gender", form.gender);
+    formData.append("isActive", form.isActive ? 1 : 0);
+
+    if (form.profile_photo) {
+      formData.append("profile_photo", form.profile_photo);
     }
+
+    try {
+
+      // console.log('formData');
+      // console.log(formData);
+      const result = await addUser(formData);
+
+      // setSnackbar({
+      //   open: true,
+      //   message: "User created successfully!",
+      //   severity: "success",
+      // });
+
+      // setTimeout(() => navigate("/Users"), 800);
+
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "Failed to create user!",
+        severity: "error",
+      });
+    }
+
+    setSubmitting(false);
   };
 
+  // -------------------------------
+  // HANDLE FORM CHANGE
+  // -------------------------------
   const handleFormChange = (newForm) => {
     setForm(newForm);
-    // Clear errors when user starts typing in a field that had an error
-    const fieldWithError = Object.keys(errors).find(key => newForm[key] !== form[key]);
-    if (fieldWithError && errors[fieldWithError]) {
-      const newErrors = { ...errors };
-      delete newErrors[fieldWithError];
-      setErrors(newErrors);
+
+    const changedField = Object.keys(errors).find(
+      (key) => newForm[key] !== form[key]
+    );
+
+    if (changedField && errors[changedField]) {
+      const updated = { ...errors };
+      delete updated[changedField];
+      setErrors(updated);
     }
   };
 
+  // -------------------------------
+  // UI
+  // -------------------------------
   return (
-
-
     <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
       <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
+
         {/* Header */}
-        <Box sx={{ mb: 3, width: "100%" }}>
+        <Box sx={{ mb: 3 }}>
           <Button
             startIcon={<ArrowBack />}
             onClick={() => navigate(-1)}
@@ -88,16 +135,18 @@ const AddUser = () => {
           >
             Back to Users
           </Button>
-          <Typography variant="h4" fontWeight={600} gutterBottom>
+
+          <Typography variant="h4" fontWeight={600}>
             Add New User
           </Typography>
+
           <Typography variant="body1" color="text.secondary">
-            Create a new user account with appropriate permissions
+            Create a new user account with appropriate permissions.
           </Typography>
         </Box>
 
         {/* Form */}
-        <Card elevation={2} sx={{ borderRadius: 2, width: "100%" }}>
+        <Card elevation={2} sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 4 }}>
             <form onSubmit={handleSubmit}>
               <UserForm
@@ -107,35 +156,33 @@ const AddUser = () => {
                 mode="add"
                 submitting={submitting}
               />
-              
+
               {/* Actions */}
-              <Box sx={{ 
-                display: "flex", 
-                gap: 2, 
-                justifyContent: "flex-end",
-                pt: 3,
-                borderTop: 1,
-                borderColor: 'divider',
-                mt: 3
-              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  justifyContent: "flex-end",
+                  pt: 3,
+                  borderTop: 1,
+                  borderColor: "divider",
+                  mt: 3,
+                }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => navigate(-1)}
                   disabled={submitting}
                   sx={{ textTransform: "none", minWidth: 120 }}
-                  size="large"
                 >
                   Cancel
                 </Button>
+
                 <Button
                   variant="contained"
                   type="submit"
                   disabled={submitting}
-                  sx={{ 
-                    textTransform: "none",
-                    minWidth: 150
-                  }}
-                  size="large"
+                  sx={{ textTransform: "none", minWidth: 150 }}
                 >
                   {submitting ? "Creating..." : "Create User"}
                 </Button>
@@ -144,6 +191,18 @@ const AddUser = () => {
           </CardContent>
         </Card>
       </Container>
+
+      {/* Snackbar Notification */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert severity={snackbar.severity} variant="filled">
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
