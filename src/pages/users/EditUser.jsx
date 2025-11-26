@@ -117,11 +117,11 @@ const EditUser = () => {
 
   if (loading) {
     return (
-      <Box sx={{ 
-        width: "100%", 
-        minHeight: "100vh",
-        display: "flex", 
-        justifyContent: "center", 
+      <Box sx={{
+        width: "100%",
+        minHeight: "100vh", 
+        display: "flex",
+        justifyContent: "center",
         alignItems: "center",
         bgcolor: "background.default"
       }}>
@@ -157,9 +157,9 @@ const EditUser = () => {
           submitting={submitting}
         />
         
-        <Box sx={{ 
-          display: "flex", 
-          gap: 2, 
+        <Box sx={{
+          display: "flex",
+          gap: 2,
           justifyContent: "flex-end",
           pt: 3,
           borderTop: 1,
@@ -179,7 +179,7 @@ const EditUser = () => {
             variant="contained"
             type="submit"
             disabled={submitting}
-            sx={{ 
+            sx={{
               textTransform: "none",
               minWidth: 150
             }}
