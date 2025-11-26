@@ -82,14 +82,13 @@ const AddUser = () => {
       // console.log('formData');
       // console.log(formData);
       const result = await addUser(formData);
+      setSnackbar({
+        open: true,
+        message: "User created successfully!",
+        severity: "success",
+      });
 
-      // setSnackbar({
-      //   open: true,
-      //   message: "User created successfully!",
-      //   severity: "success",
-      // });
-
-      // setTimeout(() => navigate("/Users"), 800);
+      setTimeout(() => navigate("/Users"), 800);
 
     } catch (error) {
       setSnackbar({

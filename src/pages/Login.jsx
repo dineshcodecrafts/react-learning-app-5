@@ -54,9 +54,8 @@ const Login = () => {
           token: data.token,
           id: data.id,
           name: data.name,
-          email: data.email,
+          email: data.email,        
         };
-
         console.log(userData);
   
         // Store in localStorage
