@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getUserById, updateUser } from "../../api/apiClient";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Button,
-  Box,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
 
@@ -60,15 +55,15 @@ const EditUser = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!form.name.trim()) newErrors.name = "Name is required";
-    
+
     if (!form.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = "Valid email is required";
     }
-    
+
     if (!form.role) newErrors.role = "Role is required";
     if (!form.gender) newErrors.gender = "Gender is required";
 
@@ -78,7 +73,7 @@ const EditUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setSubmitting(true);
@@ -89,9 +84,8 @@ const EditUser = () => {
         message: "User Updated successfully!",
         severity: "success",
       });
-    
-      setTimeout(() => navigate("/Users"), 900);
 
+      setTimeout(() => navigate("/Users"), 900);
     } catch (error) {
       console.error("Failed to update user:", error);
       setSnackbar({
@@ -107,7 +101,9 @@ const EditUser = () => {
   const handleFormChange = (newForm) => {
     setForm(newForm);
     // Clear errors when user starts typing in a field that had an error
-    const fieldWithError = Object.keys(errors).find(key => newForm[key] !== form[key]);
+    const fieldWithError = Object.keys(errors).find(
+      (key) => newForm[key] !== form[key]
+    );
     if (fieldWithError && errors[fieldWithError]) {
       const newErrors = { ...errors };
       delete newErrors[fieldWithError];
@@ -117,14 +113,16 @@ const EditUser = () => {
 
   if (loading) {
     return (
-      <Box sx={{
-        width: "100%",
-        minHeight: "100vh", 
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        bgcolor: "background.default"
-      }}>
+      <Box
+        sx={{
+          width: "100%",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          bgcolor: "background.default",
+        }}
+      >
         <CircularProgress size={60} />
       </Box>
     );
@@ -156,16 +154,18 @@ const EditUser = () => {
           mode="edit"
           submitting={submitting}
         />
-        
-        <Box sx={{
-          display: "flex",
-          gap: 2,
-          justifyContent: "flex-end",
-          pt: 3,
-          borderTop: 1,
-          borderColor: 'divider',
-          mt: 3
-        }}>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            justifyContent: "flex-end",
+            pt: 3,
+            borderTop: 1,
+            borderColor: "divider",
+            mt: 3,
+          }}
+        >
           <Button
             variant="outlined"
             onClick={() => navigate(-1)}
@@ -181,7 +181,7 @@ const EditUser = () => {
             disabled={submitting}
             sx={{
               textTransform: "none",
-              minWidth: 150
+              minWidth: 150,
             }}
             size="large"
           >

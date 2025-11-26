@@ -11,7 +11,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-
 import { useDispatch } from "react-redux";
 import { updateProfile } from "../Store/CountSlice";
 
@@ -37,31 +36,31 @@ const Login = () => {
 
   const handleLogin = async () => {
     setError("");
-  
+
     if (!email || !password) {
       setError("Please enter email and password");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const data = await loginUser(email, password);
-  
+
       if (data.token) {
         // Prepare user data
         const userData = {
           token: data.token,
           id: data.id,
           name: data.name,
-          email: data.email,        
+          email: data.email,
         };
         console.log(userData);
-  
+
         // Store in localStorage
         localStorage.setItem("userDatas", JSON.stringify(userData));
         localStorage.setItem("token", data.token);
-  
+
         // Save in Redux store
         dispatch(
           updateProfile({
@@ -71,9 +70,9 @@ const Login = () => {
             avatar: data.avatar ?? "https://example.com/img.png",
           })
         );
-  
+
         toast.success("Login successfully!...");
-  
+
         // Redirect
         navigate("/dashboard");
       } else {
@@ -83,10 +82,9 @@ const Login = () => {
     } catch (err) {
       setError("Something went wrong. Please try again.");
     }
-  
+
     setLoading(false);
   };
-  
 
   return (
     <Grid
@@ -168,7 +166,11 @@ const Login = () => {
                 mt: 1,
               }}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Login"
+              )}
             </Button>
           </Box>
         </Paper>

@@ -16,7 +16,6 @@ import UserForm from "./UserForm";
 
 import CustomSnackbar from "../../components/CustomSnackbar";
 
-
 const AddUser = () => {
   const [form, setForm] = useState({
     name: "",
@@ -81,16 +80,13 @@ const AddUser = () => {
     }
 
     try {
-      const result = await addUser(formData);
-    
+      await addUser(formData);
       setSnackbar({
         open: true,
         message: "User created successfully!",
         severity: "success",
       });
-    
       setTimeout(() => navigate("/Users"), 800);
-    
     } catch (error) {
       setSnackbar({
         open: true,
@@ -98,13 +94,10 @@ const AddUser = () => {
         severity: "error",
       });
     }
-    
+
     setSubmitting(false);
   };
 
-  // -------------------------------
-  // HANDLE FORM CHANGE
-  // -------------------------------
   const handleFormChange = (newForm) => {
     setForm(newForm);
 
@@ -119,13 +112,11 @@ const AddUser = () => {
     }
   };
 
-  // -------------------------------
-  // UI
-  // -------------------------------
   return (
-    <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
+    <Box
+      sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}
+    >
       <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
-
         {/* Header */}
         <Box sx={{ mb: 3 }}>
           <Button
@@ -198,7 +189,6 @@ const AddUser = () => {
         severity={snackbar.severity}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       />
-
     </Box>
   );
 };

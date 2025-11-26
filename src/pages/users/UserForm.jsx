@@ -45,7 +45,6 @@ const UserForm = ({
   return (
     <form>
       <Grid container spacing={3}>
-        
         {/* Name */}
         <Grid size={6}>
           <TextField
@@ -120,13 +119,17 @@ const UserForm = ({
               <MenuItem value="editor">Editor</MenuItem>
               <MenuItem value="viewer">Viewer</MenuItem>
             </Select>
-            {errors.role && <FormHelperText error>{errors.role}</FormHelperText>}
+            {errors.role && (
+              <FormHelperText error>{errors.role}</FormHelperText>
+            )}
           </FormControl>
         </Grid>
 
         {/* Profile Photo */}
         <Grid size={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+          >
             <Button
               component="label"
               variant="contained"
@@ -164,8 +167,16 @@ const UserForm = ({
               onChange={(e) => handleFieldChange("gender", e.target.value)}
             >
               <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel value="female" control={<Radio />} label="Female" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Female"
+              />
+              <FormControlLabel
+                value="other"
+                control={<Radio />}
+                label="Other"
+              />
             </RadioGroup>
             {errors.gender && (
               <FormHelperText error>{errors.gender}</FormHelperText>
@@ -175,7 +186,14 @@ const UserForm = ({
 
         {/* Active Status */}
         <Grid size={8}>
-          <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', pt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              pt: 2,
+            }}
+          >
             <FormControlLabel
               control={
                 <Checkbox
