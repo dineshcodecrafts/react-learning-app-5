@@ -277,7 +277,7 @@ const Users = () => {
   );
 
   return (
-    <PageContainer title="Add New Record">
+    <PageContainer title="Users List">
       <Container
         maxWidth="xl"
         sx={{

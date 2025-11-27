@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
-
 import CustomSnackbar from "../../components/CustomSnackbar";
 
 const AddUser = () => {
@@ -37,9 +36,7 @@ const AddUser = () => {
 
   const navigate = useNavigate();
 
-  // -------------------------------
   // FORM VALIDATION
-  // -------------------------------
   const validateForm = () => {
     const newErrors = {};
 
@@ -56,16 +53,13 @@ const AddUser = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // -------------------------------
+
   // HANDLE SUBMIT
-  // -------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
-
     setSubmitting(true);
-
     // Prepare FormData
     const formData = new FormData();
     formData.append("name", form.name);
@@ -100,7 +94,6 @@ const AddUser = () => {
 
   const handleFormChange = (newForm) => {
     setForm(newForm);
-
     const changedField = Object.keys(errors).find(
       (key) => newForm[key] !== form[key]
     );
@@ -113,9 +106,7 @@ const AddUser = () => {
   };
 
   return (
-    <Box
-      sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}
-    >
+    <Box sx={{ width: "100%", minHeight: "100vh", bgcolor: "background.default" }}>
       <Container maxWidth={false} sx={{ py: 3, px: 3 }}>
         {/* Header */}
         <Box sx={{ mb: 3 }}>

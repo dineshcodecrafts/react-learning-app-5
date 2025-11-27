@@ -154,7 +154,6 @@ const EditUser = () => {
           mode="edit"
           submitting={submitting}
         />
-
         <Box
           sx={{
             display: "flex",
