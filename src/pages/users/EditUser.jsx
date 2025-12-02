@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
-
 import PageContainer from "../../components/PageContainer";
 import CustomSnackbar from "../../components/CustomSnackbar";
 
@@ -16,6 +15,7 @@ const EditUser = () => {
     role: "",
     isActive: false,
     gender: "",
+    profile_photo: "", // Added for edit
   });
 
   const [errors, setErrors] = useState({});
@@ -34,13 +34,16 @@ const EditUser = () => {
     const loadUserData = async () => {
       try {
         const userData = await getUserById(id);
+
+        // Set form including profile_photo URL
         setForm({
           name: userData.name || "",
           email: userData.email || "",
-          password: "",
+          password: "", // leave blank for edit
           role: userData.role || "",
           isActive: userData.isActive || false,
           gender: userData.gender || "",
+          profile_photo: userData.profile_photo || "", // use URL from API
         });
       } catch (error) {
         console.error("Failed to load user:", error);
@@ -55,7 +58,6 @@ const EditUser = () => {
 
   const validateForm = () => {
     const newErrors = {};
-
     if (!form.name.trim()) newErrors.name = "Name is required";
 
     if (!form.email.trim()) {
@@ -73,18 +75,25 @@ const EditUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setSubmitting(true);
+
+    // Prepare form data for file upload
+    const formData = new FormData();
+    Object.keys(form).forEach((key) => {
+      if (form[key] !== null && form[key] !== undefined) {
+        formData.append(key, form[key]);
+      }
+    });
+
     try {
-      await updateUser(id, form);
+      await updateUser(id, formData); // Ensure API accepts multipart/form-data
       setSnackbar({
         open: true,
-        message: "User Updated successfully!",
+        message: "User updated successfully!",
         severity: "success",
       });
-
       setTimeout(() => navigate("/Users"), 900);
     } catch (error) {
       console.error("Failed to update user:", error);
@@ -100,7 +109,8 @@ const EditUser = () => {
 
   const handleFormChange = (newForm) => {
     setForm(newForm);
-    // Clear errors when user starts typing in a field that had an error
+
+    // Clear errors for fields being updated
     const fieldWithError = Object.keys(errors).find(
       (key) => newForm[key] !== form[key]
     );
@@ -154,6 +164,7 @@ const EditUser = () => {
           mode="edit"
           submitting={submitting}
         />
+
         <Box
           sx={{
             display: "flex",
@@ -178,10 +189,7 @@ const EditUser = () => {
             variant="contained"
             type="submit"
             disabled={submitting}
-            sx={{
-              textTransform: "none",
-              minWidth: 150,
-            }}
+            sx={{ textTransform: "none", minWidth: 150 }}
             size="large"
           >
             {submitting ? "Updating..." : "Update User"}

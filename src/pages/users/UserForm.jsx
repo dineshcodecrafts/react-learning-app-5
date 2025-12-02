@@ -42,6 +42,8 @@ const UserForm = ({
     }
   };
 
+  const API_URL  = `http://127.0.0.1:8000/`;
+
   return (
     <form>
       <Grid container spacing={3}>
@@ -109,7 +111,7 @@ const UserForm = ({
             error={!!errors.role}
             disabled={submitting}
           >
-            <InputLabel>User Role</InputLabel>
+            <InputLabel>User Role </InputLabel>
             <Select
               value={form.role}
               label="User Role"
@@ -136,7 +138,7 @@ const UserForm = ({
               startIcon={<CloudUploadIcon />}
               sx={{ mb: 1 }}
             >
-              Upload Profile Photo
+              Upload Profile Photo 
               <input
                 type="file"
                 hidden
@@ -144,16 +146,51 @@ const UserForm = ({
                 onChange={handleFileChange}
               />
             </Button>
+           
+                  
+            {/* Show profile photo */}
             {form.profile_photo && (
-              <Typography variant="body2" color="text.secondary">
-                Selected: {form.profile_photo.name}
-              </Typography>
+              <Box sx={{ mt: 2 }}>
+                {typeof form.profile_photo === 'string' && form.profile_photo.includes('/') ? (
+                  <Box>
+                    <img 
+                      src={`${API_URL}storage/${form.profile_photo}`}                      
+                    
+                      alt="Profile"
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        border: '2px solid #e0e0e0'
+                      }}
+                      onError={(e) => {
+                        console.log('Image failed to load:', form.profile_photo);
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                    <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                      Current Profile 
+                    </Typography>
+                  </Box>
+                ) : form.profile_photo instanceof File ? (
+                  <Typography variant="body2" color="text.secondary">
+                    Selected: {form.profile_photo.name}
+                   
+                  </Typography>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    Profile Photo: {String(form.profile_photo)}
+                  </Typography>
+                )}
+              </Box>
             )}
+
           </Box>
         </Grid>
 
         {/* Gender */}
-        <Grid isize={8}>
+        <Grid size={8}>
           <FormControl
             fullWidth
             required
