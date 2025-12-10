@@ -1,12 +1,7 @@
-
-const API_URL  = `http://127.0.0.1:8000/api`;
+const API_URL = `http://127.0.0.1:8000/api`;
 
 const userDatas = JSON.parse(localStorage.getItem("userDatas"));
 let Auth_key = userDatas?.token ? `Bearer ${userDatas.token}` : null;
-
-
-console.log('Auth_key');
-console.log(Auth_key);
 
 
 // 🔄 If token changes later (after login), update global variable
@@ -15,6 +10,7 @@ export const refreshToken = () => {
     ? `Bearer ${localStorage.getItem("token")}`
     : null;
 };
+
 
 /* ------------------ LOGIN ------------------ */
 
@@ -37,12 +33,8 @@ export const loginUser = async (email, password) => {
   return data;
 };
 
-
-
-
 // Server-side pagination
-export const fetchUsers = async (page = 1, perPage = 5, search = "") => { 
-  
+export const fetchUsers = async (page = 1, perPage = 5, search = "") => {
   const url = new URL(`${API_URL}/user`);
   url.searchParams.append("page", page);
   url.searchParams.append("per_page", perPage);
@@ -68,8 +60,6 @@ export const getUserById = async (id) => {
   return await response.json();
 };
 
-
-
 // Add user
 export const addUser = async (formData) => {
   const response = await fetch(`${API_URL}/store`, {
@@ -77,7 +67,6 @@ export const addUser = async (formData) => {
     headers: {
       Authorization: `${Auth_key}`,
       Accept: "application/json",
-
     },
     body: formData, // <-- must be FormData
   });
@@ -85,9 +74,8 @@ export const addUser = async (formData) => {
   return await response.json();
 };
 
-
 // Update user
-export const updateUser = async (id, userData) => {
+export const updateUser_old = async (id, userData) => {
   const response = await fetch(`${API_URL}/user/${id}`, {
     method: "PUT",
     headers: {
@@ -100,8 +88,22 @@ export const updateUser = async (id, userData) => {
   return await response.json();
 };
 
+export const updateUser = async (id, formData) => {
+  const response = await fetch(`${API_URL}/user/${id}`, {
+    method: "POST",  // <-- PUT does NOT support file upload in many cases
+    headers: {
+      Authorization: `${Auth_key}`,
+      Accept: "application/json",
+    },
+    body: formData, // MUST use FormData
+  });
+
+  return await response.json();
+};
+
+
 // Delete user
-export const deleteUserById = async (id) => { 
+export const deleteUserById = async (id) => {
   const response = await fetch(`${API_URL}/user/${id}`, {
     method: "DELETE",
     headers: {
@@ -122,17 +124,14 @@ export const loginUser_old = async (email, password) => {
     },
     body: JSON.stringify({
       email: email,
-      password: password
+      password: password,
     }),
   });
 
   return await response.json();
 };
 
-
-
 // LOGOUT USER – remove token from localStorage
 export const logoutUser = () => {
   localStorage.removeItem("token");
 };
-

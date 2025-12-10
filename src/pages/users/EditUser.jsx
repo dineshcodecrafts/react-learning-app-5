@@ -35,11 +35,14 @@ const EditUser = () => {
       try {
         const userData = await getUserById(id);
 
+        console.log("User data:", userData);
+
         // Set form including profile_photo URL
         setForm({
           name: userData.name || "",
           email: userData.email || "",
-          password: "", // leave blank for edit
+          // password: "", // leave blank for edit
+          password: userData.password || "", // leave blank for edit
           role: userData.role || "",
           isActive: userData.isActive || false,
           gender: userData.gender || "",

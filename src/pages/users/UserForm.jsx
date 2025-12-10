@@ -15,6 +15,7 @@ import {
   Button,
   Box,
   Typography,
+  Dialog,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
@@ -26,6 +27,19 @@ const UserForm = ({
   submitting = false,
 }) => {
   const [fileName, setFileName] = useState("");
+
+  // 🔥 Modal Preview States
+  const [openPreview, setOpenPreview] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleOpenPreview = (src) => {
+    setPreviewImage(src);
+    setOpenPreview(true);
+  };
+
+  const handleClosePreview = () => {
+    setOpenPreview(false);
+  };
 
   // Handle Input Fields
   const handleFieldChange = (field, value) => {
@@ -42,11 +56,12 @@ const UserForm = ({
     }
   };
 
-  const API_URL  = `http://127.0.0.1:8000/`;
+  const API_URL = `http://127.0.0.1:8000/`;
 
   return (
     <form>
       <Grid container spacing={3}>
+
         {/* Name */}
         <Grid size={6}>
           <TextField
@@ -138,7 +153,7 @@ const UserForm = ({
               startIcon={<CloudUploadIcon />}
               sx={{ mb: 1 }}
             >
-              Upload Profile Photo 
+              Upload Profile Photo
               <input
                 type="file"
                 hidden
@@ -146,46 +161,76 @@ const UserForm = ({
                 onChange={handleFileChange}
               />
             </Button>
-           
-                  
-            {/* Show profile photo */}
+
+            {/* Show photo preview */}
             {form.profile_photo && (
               <Box sx={{ mt: 2 }}>
-                {typeof form.profile_photo === 'string' && form.profile_photo.includes('/') ? (
+                {/* 🔥 EXISTING IMAGE FROM DATABASE */}
+                {typeof form.profile_photo === "string" &&
+                form.profile_photo.includes("/") ? (
                   <Box>
-                    <img 
-                      src={`${API_URL}storage/${form.profile_photo}`}                      
-                    
+                     <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        component="span"
+                        sx={{ cursor: "pointer", color: "primary.main" }}
+                        onClick={() =>
+                          handleOpenPreview(`${API_URL}storage/${form.profile_photo}`)
+                        }
+                      >
+                        View
+                      </Typography>
+                      <br></br>
+                    <img
+                      src={`${API_URL}storage/${form.profile_photo}`}
                       alt="Profile"
                       style={{
-                        width: '100px',
-                        height: '100px',
-                        objectFit: 'cover',
-                        borderRadius: '8px',
-                        border: '2px solid #e0e0e0'
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                        border: "2px solid #e0e0e0",
+                        cursor: "pointer",
                       }}
-                      onError={(e) => {
-                        console.log('Image failed to load:', form.profile_photo);
-                        e.target.style.display = 'none';
-                      }}
+                      onClick={() =>
+                        handleOpenPreview(
+                          `${API_URL}storage/${form.profile_photo}`
+                        )
+                      }
                     />
-                    <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                      Current Profile 
+                    <Typography variant="caption" sx={{ mt: 1, display: "block" }}>
+                      Current Profile
                     </Typography>
                   </Box>
                 ) : form.profile_photo instanceof File ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Selected: {form.profile_photo.name}
-                   
-                  </Typography>
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    Profile Photo: {String(form.profile_photo)}
-                  </Typography>
-                )}
+                  <Box>
+                    <Typography variant="body2" color="text.secondary">
+                      Selected: {form.profile_photo.name}
+                    </Typography>
+
+                    {/* 🔥 NEW UPLOADED FILE PREVIEW */}
+                    <img
+                      src={URL.createObjectURL(form.profile_photo)}
+                      alt="Preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                        border: "2px solid #e0e0e0",
+                        cursor: "pointer",
+                        marginTop: "10px",
+                      }}
+                      onClick={() =>
+                        handleOpenPreview(
+                          URL.createObjectURL(form.profile_photo)
+                        )
+                      }
+                    />
+                  </Box>
+                ) : null}
               </Box>
             )}
-
           </Box>
         </Grid>
 
@@ -204,16 +249,8 @@ const UserForm = ({
               onChange={(e) => handleFieldChange("gender", e.target.value)}
             >
               <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Female"
-              />
-              <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Other"
-              />
+              <FormControlLabel value="female" control={<Radio />} label="Female" />
+              <FormControlLabel value="other" control={<Radio />} label="Other" />
             </RadioGroup>
             {errors.gender && (
               <FormHelperText error>{errors.gender}</FormHelperText>
@@ -250,6 +287,21 @@ const UserForm = ({
           </Box>
         </Grid>
       </Grid>
+
+      {/* 🔥 IMAGE PREVIEW MODAL */}
+      <Dialog open={openPreview} onClose={handleClosePreview} maxWidth="md">
+        <Box sx={{ p: 2, textAlign: "center" }}>
+          <img
+            src={previewImage}
+            alt="Preview"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "80vh",
+              borderRadius: "10px",
+            }}
+          />
+        </Box>
+      </Dialog>
     </form>
   );
 };
