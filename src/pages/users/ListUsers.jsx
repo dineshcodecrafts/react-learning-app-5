@@ -7,11 +7,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchUsers, deleteUserById } from "../../api/apiClient";
-import { updateCount } from "../../store/CountSlice";
+import { updateCount } from "../../store/slices/CountSlice";
 
-import ConfirmDialog from "../../components/ConfirmDialog";
+import ConfirmDialog from "../../components/ui/ConfirmDialog";
 import UsersTable from "./UsersTable";
-import ProfileBreadcrumbs from "../../components/ProfileBreadcrumbs";
+import ProfileBreadcrumbs from "../../components/ui/ProfileBreadcrumbs";
 
 import {
   Clear as ClearIcon,
@@ -19,7 +19,7 @@ import {
   Search as SearchIcon
 } from "@mui/icons-material";
 
-import PageContainer from "../../components/PageContainer";
+import PageContainer from "../../components/ui/PageContainer";
 
 const Users = () => {
 

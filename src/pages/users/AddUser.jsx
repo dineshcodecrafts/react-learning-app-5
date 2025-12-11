@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
-import CustomSnackbar from "../../components/CustomSnackbar";
+import CustomSnackbar from "../../components/ui/CustomSnackbar";
 
 const AddUser = () => {
   const [form, setForm] = useState({

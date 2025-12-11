@@ -1,5 +1,5 @@
 import React from "react";
-import PageContainer from "../components/PageContainer";
+import PageContainer from "../components/ui/PageContainer";
 import { TextField, Grid, Button } from "@mui/material";
 
 export default function About() {

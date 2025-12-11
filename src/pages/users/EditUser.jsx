@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import UserForm from "./UserForm";
-import PageContainer from "../../components/PageContainer";
-import CustomSnackbar from "../../components/CustomSnackbar";
+import PageContainer from "../../components/ui/PageContainer";
+import CustomSnackbar from "../../components/ui/CustomSnackbar";
 
 const EditUser = () => {
   const [form, setForm] = useState({

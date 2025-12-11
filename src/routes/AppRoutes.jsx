@@ -20,7 +20,6 @@ import ProtectedRoute from "./ProtectedRoute";
 const AppRoutes = () => {
   return (
     <Routes>
-
       {/* Public Route */}
       <Route path="/login" element={<Login />} />
 
@@ -45,7 +44,6 @@ const AppRoutes = () => {
         <Route path="upload" element={<ImageUpload />} />
         <Route path="sampleform" element={<SampleForm />} />
       </Route>
-
     </Routes>
   );
 };

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { useDispatch } from "react-redux";
-import { updateProfile } from "./Store/CountSlice";
+import { updateProfile } from "./store/slices/CountSlice";
 
 import { loginUser } from "./api/apiClient"; // make sure path is correct
 

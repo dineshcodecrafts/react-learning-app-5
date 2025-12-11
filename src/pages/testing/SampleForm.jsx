@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import {TextField} from "@mui/material";
 
 
-import PageContainer from '../../components/PageContainer'
+import PageContainer from '../../components/ui/PageContainer'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',

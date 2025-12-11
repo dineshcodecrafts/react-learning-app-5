@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import ProfileBreadcrumbs from "../components/ProfileBreadcrumbs";
+import ProfileBreadcrumbs from "../components/ui/ProfileBreadcrumbs";
 
 
 

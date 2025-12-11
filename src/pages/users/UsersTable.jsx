@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ExportPdf from "../../components/ExportPdf";
+import ExportPdf from "../../components/ui/ExportPdf";
 
 export default function UsersTable({
   users = [],

@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 
 import { useSelector } from "react-redux";
-import ProfileBreadcrumbs from "../components/ProfileBreadcrumbs";
-import PageContainer from "../components/PageContainer";
+import ProfileBreadcrumbs from "../components/ui/ProfileBreadcrumbs";
+import PageContainer from "../components/ui/PageContainer";
 
 const Home = () => {
   // const UserName = useSelector((state) => state.users.name) ;
