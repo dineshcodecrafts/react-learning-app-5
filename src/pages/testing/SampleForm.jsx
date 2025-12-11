@@ -28,10 +28,10 @@ export default function SampleForm() {
         <Grid size={8}>
           
         <TextField
-  label="Responsive Width"
-  variant="outlined"
-  sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
-/>
+          label="Responsive Width"
+          variant="outlined"
+          sx={{ width: { xs: "100%", sm: "70%", md: "100%" } }}
+        />
         {/* <Item>size=4</Item> */}
           {/* <TextField id="outlined-basic" label="Outlined" variant="outlined"  sx={{ width: { xs: "100%", sm: "70%", md: "50%" } }} /> */}
         </Grid>

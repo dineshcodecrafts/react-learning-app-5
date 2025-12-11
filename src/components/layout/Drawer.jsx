@@ -11,6 +11,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import FormatListBulletedAddIcon from '@mui/icons-material/FormatListBulletedAdd';
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import InfoIcon from "@mui/icons-material/Info";
@@ -61,8 +62,9 @@ const Drawer = styled(MuiDrawer, {
 
 const menuItems = [
   { text: "Home", path: "/", icon: <HomeIcon /> },
-  { text: "Users", path: "/users", icon: <PeopleIcon /> },
-  { text: "About", path: "/about", icon: <InfoIcon /> },
+  { text: "Users", path: "/users", icon: < FormatListBulletedAddIcon/> },
+  { text: "Profile", path: "/profile", icon: <PeopleIcon /> },
+  { text: "sample", path: "/about", icon: <InfoIcon /> },
 ];
 
 export default function NavDrawer({ open, onClose }) {

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
-  Box, Container, TextField, Button, Typography, useTheme,
-  useMediaQuery, Grid, Alert, Snackbar, Chip, MenuItem,
-  InputAdornment, IconButton, Drawer, Divider
+  Box, Container, TextField, Button, Typography,
+  Grid, Alert, Snackbar, InputAdornment, IconButton
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -16,9 +15,8 @@ import ProfileBreadcrumbs from "../../components/ProfileBreadcrumbs";
 
 import {
   Clear as ClearIcon,
-  Tune as TuneIcon,
   Add as AddIcon,
-  Search as SearchIcon,
+  Search as SearchIcon
 } from "@mui/icons-material";
 
 import PageContainer from "../../components/PageContainer";
@@ -35,12 +33,9 @@ const Users = () => {
   const [pageSize, setPageSize] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
 
-  // SEARCH & FILTERS
+  // SEARCH
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [filters, setFilters] = useState({ status: "all", role: "all" });
-
-  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   // DIALOG
   const [dialogState, setDialogState] = useState({
@@ -52,15 +47,6 @@ const Users = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const isSmallMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  // Update count in Redux
-  useEffect(() => {
-    dispatch(updateCount(users.length));
-  }, [users.length]);
 
   // Debounce search
   useEffect(() => {
@@ -75,22 +61,24 @@ const Users = () => {
   const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await fetchUsers(currentPage, pageSize, debouncedSearch, filters);
+      // filters removed → API sends only page, size, search
+      const data = await fetchUsers(currentPage, pageSize, debouncedSearch);
       setUsers(data.data || []);
       setTotalRows(data.total || 0);
+      dispatch(updateCount(data.data.length));
     } catch (err) {
       console.error(err);
       setError("Failed to load users.");
     } finally {
       setLoading(false);
     }
-  }, [currentPage, pageSize, debouncedSearch, filters]);
+  }, [currentPage, pageSize, debouncedSearch]);
 
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
 
-  // HANDLE CONFIRM ACTION
+  // Confirm Action
   const handleConfirm = async () => {
     const { type, id } = dialogState;
 
@@ -109,93 +97,25 @@ const Users = () => {
     closeDialogBox();
   };
 
-  // OPEN / CLOSE DIALOG
+  // Dialog Functions
   const showDialogBox = (type, id, msg) =>
     setDialogState({ open: true, type, id, msg });
 
   const closeDialogBox = () =>
     setDialogState({ open: false, type: null, id: null, msg: "" });
 
-  // FILTER CHANGE
-  const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    setCurrentPage(1);
-    if (isMobile) setFilterDrawerOpen(false);
-  };
-
-  const handleClearAllFilters = () => {
-    setFilters({ status: "all", role: "all" });
-    setCurrentPage(1);
-  };
-
-  // FILTER DRAWER UI
-  const FilterDrawer = () => (
-    <Drawer
-      anchor="right"
-      open={filterDrawerOpen}
-      onClose={() => setFilterDrawerOpen(false)}
-      PaperProps={{ sx: { width: isSmallMobile ? "100%" : 320, p: 3 } }}
-    >
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Typography variant="h6">Filters</Typography>
-        <IconButton onClick={() => setFilterDrawerOpen(false)}>
-          <ClearIcon />
-        </IconButton>
-      </Box>
-
-      <Divider sx={{ mb: 3 }} />
-
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <TextField
-          select
-          label="Status"
-          value={filters.status}
-          onChange={(e) => handleFilterChange("status", e.target.value)}
-          fullWidth
-        >
-          <MenuItem value="all">All Status</MenuItem>
-          <MenuItem value="active">Active</MenuItem>
-          <MenuItem value="inactive">Inactive</MenuItem>
-          <MenuItem value="pending">Pending</MenuItem>
-        </TextField>
-
-        <TextField
-          select
-          label="Role"
-          value={filters.role}
-          onChange={(e) => handleFilterChange("role", e.target.value)}
-          fullWidth
-        >
-          <MenuItem value="all">All Roles</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-          <MenuItem value="user">User</MenuItem>
-          <MenuItem value="manager">Manager</MenuItem>
-        </TextField>
-
-        <Button variant="outlined" onClick={handleClearAllFilters}>
-          Clear All
-        </Button>
-        <Button variant="contained" onClick={() => setFilterDrawerOpen(false)}>
-          Apply
-        </Button>
-      </Box>
-    </Drawer>
-  );
-
   return (
     <PageContainer title="Users List">
       <Container maxWidth="xl" sx={{ py: 3 }}>
-        
-        {/* ERROR SNACKBAR */}
+
+        {/* Error Snackbar */}
         <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
           <Alert severity="error">{error}</Alert>
         </Snackbar>
 
-        <FilterDrawer />
-
         <ProfileBreadcrumbs items={["Home", "User Management", "Users List"]} />
 
-        {/* CONFIRM BOX */}
+        {/* Confirm Dialog */}
         <ConfirmDialog
           open={dialogState.open}
           title={dialogState.type === "delete" ? "Delete User" : "Edit User"}
@@ -206,7 +126,7 @@ const Users = () => {
           confirmColor={dialogState.type === "delete" ? "error" : "primary"}
         />
 
-        {/* HEADER */}
+        {/* Header */}
         <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
           <Box>
             <Typography variant="h4">Users List</Typography>
@@ -222,7 +142,7 @@ const Users = () => {
           </Button>
         </Box>
 
-        {/* SEARCH */}
+        {/* Search */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
             <TextField
@@ -243,59 +163,13 @@ const Users = () => {
                       <ClearIcon />
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           </Grid>
-
-          {!isMobile && (
-            <>
-              <Grid item xs={6} md={3}>
-                <TextField
-                  select
-                  label="Status"
-                  value={filters.status}
-                  onChange={(e) => handleFilterChange("status", e.target.value)}
-                  fullWidth
-                >
-                  <MenuItem value="all">All Status</MenuItem>
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="inactive">Inactive</MenuItem>
-                  <MenuItem value="pending">Pending</MenuItem>
-                </TextField>
-              </Grid>
-
-              <Grid item xs={6} md={3}>
-                <TextField
-                  select
-                  label="Role"
-                  value={filters.role}
-                  onChange={(e) => handleFilterChange("role", e.target.value)}
-                  fullWidth
-                >
-                  <MenuItem value="all">All Roles</MenuItem>
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="user">User</MenuItem>
-                  <MenuItem value="manager">Manager</MenuItem>
-                </TextField>
-              </Grid>
-            </>
-          )}
-
-          {isMobile && (
-            <Grid item xs={12}>
-              <Button
-                variant="outlined"
-                onClick={() => setFilterDrawerOpen(true)}
-                fullWidth
-              >
-                Filters
-              </Button>
-            </Grid>
-          )}
         </Grid>
 
-        {/* USERS TABLE */}
+        {/* Users Table */}
         <UsersTable
           users={users}
           loading={loading}
