@@ -6,16 +6,20 @@ import UsersPage from "./pages/Users";
 import AboutPage from "./pages/About";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
-import ProtectedRoute from "./components/ProtectedRoute";
+
 import MiniDrawer from "./components/Navbar"; // your drawer
 import Layout from "./components/layout/layout";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from "../../src/routes/ProtectedRoute";
 
 
 
 function App() {
+
+
+
   return (
 
     <>

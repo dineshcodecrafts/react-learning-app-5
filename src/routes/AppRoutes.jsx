@@ -14,8 +14,8 @@ import ImageUpload from "../pages/testing/ImageUpload";
 import SampleForm from "../pages/testing/SampleForm";
 
 // Components
-import ProtectedRoute from "../components/ProtectedRoute";
 import Layout from "../components/layout/Layout";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
