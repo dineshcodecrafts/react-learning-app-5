@@ -113,7 +113,7 @@ const Users = () => {
           <Alert severity="error">{error}</Alert>
         </Snackbar>
 
-        <ProfileBreadcrumbs items={["Home", "User Management", "Users List"]} />
+        <ProfileBreadcrumbs items={["Home", "Users List"]} />
 
         {/* Confirm Dialog */}
         <ConfirmDialog

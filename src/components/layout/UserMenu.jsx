@@ -57,7 +57,7 @@ export default function UserMenu({ onLogoutClick }) {
         >
           {/* <Avatar alt="User Avatar" src="../../images/avatar.png" /> */}
           <Avatar alt="User Avatar" src={`${VITE_STORAGE_URL}${userData.profilePhoto}` || "../../images/avatar.png"} />
-
+          
         </Button>
       </Stack>
 

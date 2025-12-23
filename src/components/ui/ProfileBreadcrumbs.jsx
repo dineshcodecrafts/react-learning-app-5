@@ -3,6 +3,8 @@ import { Breadcrumbs, Link, Typography, Box } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import HomeIcon from "@mui/icons-material/Home";
 
+import { Link as RouterLink } from "react-router-dom";
+
 export default function ProfileBreadcrumbs({ items = [] }) {
   return (
     <Box sx={{ mb: 3 }}>
@@ -25,9 +27,10 @@ export default function ProfileBreadcrumbs({ items = [] }) {
             return (
               <Link
                 key={index}
+                component={RouterLink}
+                to="/dashboard"
                 underline="hover"
                 color="inherit"
-                href="/dashboard"
                 sx={{ display: "flex", alignItems: "center" }}
               >
                 <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />

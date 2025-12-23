@@ -91,9 +91,9 @@ export default function ProfileAccount() {
 
 
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        <ProfileBreadcrumbs items={["Home", "Profile Settings", "Profile"]} />
+        <ProfileBreadcrumbs items={["Home", "Profile"]} />
         <Typography variant="h5" mb={2} fontWeight={700}>
-          Profile {APIURL}
+          Profile
         </Typography>
 
         <Paper elevation={1} sx={{ overflow: "hidden" }}>

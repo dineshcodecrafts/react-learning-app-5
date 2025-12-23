@@ -13,6 +13,8 @@ import ProfileAccount from "../pages/ProfileAccount";
 import ImageUpload from "../pages/testing/ImageUpload";
 import SampleForm from "../pages/testing/SampleForm";
 
+import ParaComponent from "../pages/testing/ParaComponent";
+
 // Components
 import Layout from "../components/layout/Layout";
 import ProtectedRoute from "./ProtectedRoute";
@@ -43,6 +45,7 @@ const AppRoutes = () => {
         <Route path="profile" element={<ProfileAccount />} />
         <Route path="upload" element={<ImageUpload />} />
         <Route path="sampleform" element={<SampleForm />} />
+        <Route path="paracomponent" element= {<ParaComponent></ParaComponent>} />
       </Route>
     </Routes>
   );

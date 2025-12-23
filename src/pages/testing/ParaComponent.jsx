@@ -1,10 +1,10 @@
 import React from "react";
-import PageContainer from "../components/ui/PageContainer";
+import PageContainer from "../../components/ui/PageContainer";
 import { Grid, Box, Typography } from "@mui/material";
 
-export default function About() {
+export default function ParaComponent() {
   return (
-    <PageContainer title="About">
+    <PageContainer title="Para Component">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box sx={{ width: "100%", maxWidth: 500 }}>

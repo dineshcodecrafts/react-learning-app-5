@@ -19,11 +19,11 @@ const Home = () => {
 
   return (
     <>
-      <PageContainer title="Add New Record">
+      <PageContainer title="Dashboard">
         <Box sx={{ p: 3 }}>
-          <ProfileBreadcrumbs items={["Home", "Profile Settings", "Profile"]} />
+          <ProfileBreadcrumbs items={["Home", "Dashboard"]} />
           <Typography variant="h4" gutterBottom>
-            Welcome to My App! {profile.name}
+            Welcome to My App!
           </Typography>
 
           <Typography variant="body1" sx={{ mb: 3 }}>
