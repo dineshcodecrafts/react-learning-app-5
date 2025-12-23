@@ -13,6 +13,8 @@ import ProfileAccount from "../pages/ProfileAccount";
 import ImageUpload from "../pages/testing/ImageUpload";
 import SampleForm from "../pages/testing/SampleForm";
 
+import UserCreateEditPage from "../pages/users/UserCreateEditPage";
+
 import ParaComponent from "../pages/testing/ParaComponent";
 
 // Components
@@ -40,8 +42,13 @@ const AppRoutes = () => {
         <Route path="dashboard" element={<HomePage />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="about" element={<AboutPage />} />
+
         <Route path="adduser" element={<AddUser />} />
         <Route path="edituser/:id" element={<EditUser />} />
+
+        <Route path="/users/new" element={<UserCreateEditPage />} />
+        <Route path="/users/:id/edit" element={<UserCreateEditPage />} />
+
         <Route path="profile" element={<ProfileAccount />} />
         <Route path="upload" element={<ImageUpload />} />
         <Route path="sampleform" element={<SampleForm />} />

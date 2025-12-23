@@ -62,7 +62,7 @@ export const getUserById = async (id) => {
 
 // Add user
 export const addUser = async (formData) => {
-  const response = await fetch(`${API_URL}/store`, {
+  const response = await fetch(`${API_URL}/user`, {
     method: "POST",
     headers: {
       Authorization: `${Auth_key}`,

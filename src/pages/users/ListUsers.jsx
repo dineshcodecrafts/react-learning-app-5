@@ -88,8 +88,9 @@ const Users = () => {
         await loadUsers();
       }
       if (type === "edit") {
-        navigate(`/EditUser/${id}`);
+        navigate(`/users/${id}/edit`);
       }
+      
     } catch {
       setError(`Failed to ${type} user.`);
     }
@@ -136,10 +137,11 @@ const Users = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => navigate("/AddUser")}
+            onClick={() => navigate("/users/new")}
           >
             Add User
           </Button>
+
         </Box>
 
         {/* Search */}
