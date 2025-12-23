@@ -12,7 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import UserForm from "./UserForm";
+import UserFormFields from "./UserFormFields";
 import CustomSnackbar from "../../components/ui/CustomSnackbar";
 
 const AddUser = () => {
@@ -131,7 +131,7 @@ const AddUser = () => {
         <Card elevation={2} sx={{ borderRadius: 2 }}>
           <CardContent sx={{ p: 4 }}>
             <form onSubmit={handleSubmit}>
-              <UserForm
+              <UserFormFields
                 form={form}
                 errors={errors}
                 onChange={handleFormChange}

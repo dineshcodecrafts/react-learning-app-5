@@ -10,7 +10,7 @@ import { fetchUsers, deleteUserById } from "../../api/apiClient";
 import { updateCount } from "../../store/slices/CountSlice";
 
 import ConfirmDialog from "../../components/ui/ConfirmDialog";
-import UsersTable from "./UsersTable";
+import ListUsersTable from "./ListUsersTable";
 import ProfileBreadcrumbs from "../../components/ui/ProfileBreadcrumbs";
 
 import {
@@ -170,7 +170,7 @@ const Users = () => {
         </Grid>
 
         {/* Users Table */}
-        <UsersTable
+        <ListUsersTable
           users={users}
           loading={loading}
           handleDelete={(id) =>

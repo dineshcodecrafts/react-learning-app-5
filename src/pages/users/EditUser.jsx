@@ -3,7 +3,7 @@ import { getUserById, updateUser } from "../../api/apiClient";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import UserForm from "./UserForm";
+import UserFormFields from "./UserFormFields";
 import PageContainer from "../../components/ui/PageContainer";
 import CustomSnackbar from "../../components/ui/CustomSnackbar";
 
@@ -160,7 +160,7 @@ const EditUser = () => {
       </Box>
 
       <form onSubmit={handleSubmit}>
-        <UserForm
+        <UserFormFields
           form={form}
           errors={errors}
           onChange={handleFormChange}
