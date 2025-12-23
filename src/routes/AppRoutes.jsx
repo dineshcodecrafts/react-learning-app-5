@@ -7,8 +7,8 @@ import Login from "../Login";
 import HomePage from "../pages/Home";
 import UsersPage from "../pages/users/ListUsers";
 import AboutPage from "../pages/About";
-import AddUser from "../pages/users/AddUser";
-import EditUser from "../pages/users/EditUser";
+// import AddUser from "../pages/users/AddUser";
+// import EditUser from "../pages/users/EditUser";
 import ProfileAccount from "../pages/ProfileAccount";
 import ImageUpload from "../pages/testing/ImageUpload";
 import SampleForm from "../pages/testing/SampleForm";
@@ -43,8 +43,8 @@ const AppRoutes = () => {
         <Route path="users" element={<UsersPage />} />
         <Route path="about" element={<AboutPage />} />
 
-        <Route path="adduser" element={<AddUser />} />
-        <Route path="edituser/:id" element={<EditUser />} />
+        {/* <Route path="adduser" element={<AddUser />} /> */}
+        {/* <Route path="edituser/:id" element={<EditUser />} /> */}
 
         <Route path="/users/new" element={<UserCreateEditPage />} />
         <Route path="/users/:id/edit" element={<UserCreateEditPage />} />

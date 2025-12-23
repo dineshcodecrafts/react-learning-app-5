@@ -13,6 +13,8 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import UserFormFields from "./UserFormFields";
 import CustomSnackbar from "../../components/ui/CustomSnackbar";
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 const INITIAL_FORM = {
   name: "",
@@ -138,9 +140,11 @@ const UserCreateEditPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <CircularProgress size={60} />
-      </Box>
+        <>
+        <Box sx={{width: "100%",display: "flex",justifyContent: "center",alignItems: "center",}}>
+            <LinearProgress sx={{ width: "100%" }} />
+        </Box>
+      </>
     );
   }
 
