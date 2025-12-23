@@ -1,31 +1,12 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  FormLabel,
-  Grid,
-  FormHelperText,
-  Button,
-  Box,
-  Typography,
-  Dialog,
-} from "@mui/material";
+import { TextField, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox, Radio, RadioGroup, FormLabel, Grid, FormHelperText, Button, Box, Typography, Dialog } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const UserForm = ({
-  form,
-  errors,
-  onChange,
-  mode = "add",
-  submitting = false,
-}) => {
+const UserForm = ({ form, errors, onChange, mode = "add", submitting = false }) => {
+
+
+  const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL;
+
   const [fileName, setFileName] = useState("");
 
   // 🔥 Modal Preview States
@@ -56,7 +37,7 @@ const UserForm = ({
     }
   };
 
-  const API_URL = `http://127.0.0.1:8000/`;
+ 
 
   return (
     <form>
@@ -175,14 +156,14 @@ const UserForm = ({
                         component="span"
                         sx={{ cursor: "pointer", color: "primary.main" }}
                         onClick={() =>
-                          handleOpenPreview(`${API_URL}storage/${form.profile_photo}`)
+                          handleOpenPreview(`${VITE_STORAGE_URL}${form.profile_photo}`)
                         }
                       >
                         View
                       </Typography>
                       <br></br>
                     <img
-                      src={`${API_URL}storage/${form.profile_photo}`}
+                      src={`${VITE_STORAGE_URL}${form.profile_photo}`}
                       alt="Profile"
                       style={{
                         width: "100px",
@@ -194,7 +175,7 @@ const UserForm = ({
                       }}
                       onClick={() =>
                         handleOpenPreview(
-                          `${API_URL}storage/${form.profile_photo}`
+                          `${VITE_STORAGE_URL}${form.profile_photo}`
                         )
                       }
                     />
