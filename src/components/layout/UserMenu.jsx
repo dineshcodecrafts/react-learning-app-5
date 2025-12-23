@@ -11,6 +11,8 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import { useNavigate } from "react-router-dom";
 
+const VITE_STORAGE_URL = import.meta.env.VITE_STORAGE_URL;
+
 export default function UserMenu({ onLogoutClick }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const profile = useSelector((state) => state.users.profile);
@@ -53,7 +55,9 @@ export default function UserMenu({ onLogoutClick }) {
           aria-expanded={open ? "true" : undefined}
           onClick={handleClick}
         >
-          <Avatar alt="User Avatar" src="../../images/avatar.png" />
+          {/* <Avatar alt="User Avatar" src="../../images/avatar.png" /> */}
+          <Avatar alt="User Avatar" src={`${VITE_STORAGE_URL}${userData.profilePhoto}` || "../../images/avatar.png"} />
+
         </Button>
       </Stack>
 
