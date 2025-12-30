@@ -135,3 +135,16 @@ export const loginUser_old = async (email, password) => {
 export const logoutUser = () => {
   localStorage.removeItem("token");
 };
+
+export const getAllUsers = async () => {
+  const response = await fetch(`${API_URL}/users/export`, {
+    method: "GET",
+    headers: {
+      Authorization: `${Auth_key}`,
+      Accept: "application/json",
+    },
+  });
+
+  return await response.json();
+};
+ 

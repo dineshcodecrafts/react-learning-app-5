@@ -5,7 +5,7 @@ import { Routes, Route, Outlet } from "react-router-dom";
 // Pages
 import Login from "../Login";
 import HomePage from "../pages/Home";
-import UsersPage from "../pages/users/ListUsers";
+import ListUsers from "../pages/users/ListUsers";
 import AboutPage from "../pages/About";
 // import AddUser from "../pages/users/AddUser";
 // import EditUser from "../pages/users/EditUser";
@@ -40,7 +40,7 @@ const AppRoutes = () => {
       >
         <Route index element={<HomePage />} />
         <Route path="dashboard" element={<HomePage />} />
-        <Route path="users" element={<UsersPage />} />
+        <Route path="users" element={<ListUsers />} />
         <Route path="about" element={<AboutPage />} />
 
         {/* <Route path="adduser" element={<AddUser />} /> */}

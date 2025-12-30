@@ -108,7 +108,7 @@ export default function UsersTable({
    * Desktop → DataGrid
    -------------------------- */
   const columns = [
-    { field: "id", headerName: "ID", width: 80 },
+    { field: "id", headerName: "ID", width: 100 },
     {
       field: "name",
       headerName: "Name",
@@ -121,14 +121,16 @@ export default function UsersTable({
       field: "email",
       headerName: "Email",
       flex: 1,
+      width: 50,
       renderCell: ({ value }) => (
-        <Typography fontSize={font("0.75rem", "0.85rem")}>{value}</Typography>
+        <Typography fontSize={font("0.75rem", "0.9rem")}>{value}</Typography>
       ),
     },
     {
-      field: "role",
+      field: "role", 
       headerName: "Role",
-      width: 120,
+      width: 80,
+      flex: 1,
       renderCell: ({ value }) => (
         <Typography fontSize={font("0.75rem", "0.85rem")} fontWeight={500}>
           {value}
@@ -138,7 +140,8 @@ export default function UsersTable({
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 200,
+      flex: 1,
       sortable: false,
       renderCell: (params) => (
         <Box sx={{ display: "flex", gap: 1 }}>
@@ -171,6 +174,7 @@ export default function UsersTable({
         }}
         disableRowSelectionOnClick
         slots={{ noRowsOverlay: EmptyState }}
+
         sx={{
           border: 0,
           "& .MuiDataGrid-cell": {
@@ -180,6 +184,7 @@ export default function UsersTable({
             fontWeight: 600,
           },
         }}
+        
       />
     </Box>
   );
