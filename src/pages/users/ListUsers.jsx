@@ -1,12 +1,20 @@
-import React, { useEffect, useState, useCallback, useMemo  } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
-  Box, Container, TextField, Button, Typography,
-  Grid, Alert, Snackbar, InputAdornment, IconButton
+  Box,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Grid,
+  Alert,
+  Snackbar,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUsers, deleteUserById , getAllUsers} from "../../api/apiClient";
+import { fetchUsers, deleteUserById, getAllUsers, testApiConnection } from "../../api/apiClient";
 import { updateCount } from "../../store/slices/CountSlice";
 
 import ConfirmDialog from "../../components/ui/ConfirmDialog";
@@ -15,30 +23,34 @@ import ProfileBreadcrumbs from "../../components/ui/ProfileBreadcrumbs";
 
 import ExportExcelButton from "../../components/ui/ExportExcelButton";
 
-
 import {
   Clear as ClearIcon,
   Add as AddIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
 } from "@mui/icons-material";
 
 import PageContainer from "../../components/ui/PageContainer";
 
 const Users = () => {
 
+
+
   // USER DATA
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
- 
 
-  const exportData = useMemo(() => [
-    { field: "id", headerName: "Id" },
-    { field: "name", headerName: "Name" },
-    { field: "email", headerName: "Email" },
-    { field: "role", headerName: "Role" },
-    { field: "gender", headerName: "Gender" },
-  ], []);
+  // Excel column headings
+  const exportData = useMemo(
+    () => [
+      { field: "id", headerName: "Id" },
+      { field: "name", headerName: "Name" },
+      { field: "email", headerName: "Email" },
+      { field: "role", headerName: "Role" },
+      { field: "gender", headerName: "Gender" },
+    ],
+    []
+  );
 
   // PAGINATION
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +66,7 @@ const Users = () => {
     open: false,
     type: null,
     id: null,
-    msg: ""
+    msg: "",
   });
 
   const navigate = useNavigate();
@@ -93,7 +105,6 @@ const Users = () => {
   // Confirm Action
   const handleConfirm = async () => {
     const { type, id } = dialogState;
-
     try {
       if (type === "delete") {
         await deleteUserById(id);
@@ -102,11 +113,9 @@ const Users = () => {
       if (type === "edit") {
         navigate(`/users/${id}/edit`);
       }
-      
     } catch {
       setError(`Failed to ${type} user.`);
     }
-
     closeDialogBox();
   };
 
@@ -120,9 +129,12 @@ const Users = () => {
   return (
     <PageContainer title="Users List">
       <Container maxWidth="xl" sx={{ py: 3 }}>
-
         {/* Error Snackbar */}
-        <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={() => setError(null)}
+        >
           <Alert severity="error">{error}</Alert>
         </Snackbar>
 
@@ -145,7 +157,6 @@ const Users = () => {
             <Typography variant="h4">Users List</Typography>
             <Typography variant="body2">Manage your team users</Typography>
           </Box>
-
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -159,13 +170,10 @@ const Users = () => {
           >
             Add User
           </Button>
-
-
         </Box>
-        <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
-      
-        
-        </Box>
+        <Box
+          sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}
+        ></Box>
         {/* Search */}
         <Grid
           container
@@ -174,43 +182,48 @@ const Users = () => {
           justifyContent="space-between"
           sx={{ mb: 3 }}
         >
-        {/* Search (Left) */}
-        <Grid item xs={12} md={6}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="Search by name, email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-              endAdornment: searchTerm && (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setSearchTerm("")}>
-                    <ClearIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
+          {/* Search (Left) */}
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="Search by name, email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: searchTerm && (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setSearchTerm("")}>
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+
+          {/* Export Excel (Right) */}
+          <Grid
+            item
+            xs={12}
+            md="auto"
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "flex-start", md: "flex-end" },
             }}
-          />
+          >
+            <ExportExcelButton
+              fetchData={getAllUsers}
+              fileName="users.xlsx"
+              columns={exportData}
+            />
+          </Grid>
         </Grid>
-
-        {/* Export Excel (Right) */}
-        <Grid item xs={12} md="auto"
-          sx={{ display: "flex", justifyContent: { xs: "flex-start", md: "flex-end" }, }}
-        >
-          <ExportExcelButton
-            fetchData={getAllUsers}
-            fileName="users.xlsx"
-            columns={exportData}
-          />
-        </Grid>
-        </Grid>
-
 
         {/* Users Table */}
         <ListUsersTable
@@ -228,8 +241,6 @@ const Users = () => {
           setPageSize={setPageSize}
           totalRows={totalRows}
         />
-
-
       </Container>
     </PageContainer>
   );
