@@ -4,7 +4,8 @@ const UserForm = () => {
   return (
     <>
         <div className='container'>
-            
+
+            <input type='text' ></input> 
 
         </div>
     
