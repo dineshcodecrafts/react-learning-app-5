@@ -14,7 +14,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { fetchUsers, deleteUserById, getAllUsers, testApiConnection } from "../../api/apiClient";
+import { fetchUsers, deleteUserById, getAllUsers, testApiWithAuth } from "../../api/apiClient";
 import { updateCount } from "../../store/slices/CountSlice";
 
 import ConfirmDialog from "../../components/ui/ConfirmDialog";
@@ -129,6 +129,8 @@ const Users = () => {
   return (
     <PageContainer title="Users List">
       <Container maxWidth="xl" sx={{ py: 3 }}>
+
+        <button onClick={testApiWithAuth}>Test</button>
         {/* Error Snackbar */}
         <Snackbar
           open={!!error}
