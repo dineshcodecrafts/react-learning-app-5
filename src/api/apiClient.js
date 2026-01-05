@@ -72,6 +72,14 @@ export const loginUser = async (email, password) => {
   }
 };
 
+// LOGOUT USER – remove token from localStorage
+export const logoutUser = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userDatas");
+  // Clear axios authorization header
+  delete api.defaults.headers.common['Authorization'];
+};
+
 // Fetch users with pagination and search
 export const fetchUsers = async (page = 1, perPage = 5, search = "") => {
   try {
@@ -142,24 +150,6 @@ export const updateUser = async (id, userData) => {
   }
 };
 
-// Update user with FormData (for file upload)
-export const updateUserWithFile = async (id, formData) => {
-  try {
-    const res = await api.post(`/user/${id}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error(
-      "UPDATE USER WITH FILE FAILED:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-
 // Delete user
 export const deleteUserById = async (id) => {
   try {
@@ -182,38 +172,6 @@ export const getAllUsers = async () => {
   } catch (error) {
     console.error(
       "GET ALL USERS FAILED:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
-  }
-};
-
-// LOGOUT USER – remove token from localStorage
-export const logoutUser = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userDatas");
-  // Clear axios authorization header
-  delete api.defaults.headers.common['Authorization'];
-};
-
-// Optional: Clean up old function names
-export const loginUserOld = loginUser; // Alias for backward compatibility if needed
-
-// Optional: Alternative method without interceptor (for specific cases)
-export const addUserManual = async (formData) => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await axios.post(`${API_URL}/user`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-        Accept: "application/json",
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error(
-      "ADD USER MANUAL FAILED:",
       error.response ? error.response.data : error.message
     );
     throw error;
